@@ -12,8 +12,11 @@ import { SolutionGrid } from "./solution-card";
 import { publishedProducts, toProductCard } from "@/data/products";
 import { ProductGrid } from "@/components/catalog/product-card";
 import { ProjectPreview } from "@/components/sections/project-preview";
+import { equipmentMedia, solutionMedia } from "@/data/media";
+import { ApprovedImage } from "@/components/ui/approved-image";
 
 export function SolutionDetail({ solution }: { solution: Solution }) {
+  const heroImage = solutionMedia(solution.slug);
   const related = getRelatedSolutions(solution);
   const products = publishedProducts
     .filter((item) => item.categoryId === solution.slug)
@@ -31,11 +34,11 @@ export function SolutionDetail({ solution }: { solution: Solution }) {
         ]}
         visual={
           <figure className="solution-hero-art">
-            <EquipmentIllustration
+            {heroImage ? <ApprovedImage image={heroImage} label={solution.title} visual={solution.visual} sizes="(max-width: 767px) 100vw, 50vw" priority /> : <EquipmentIllustration
               variant={solution.visual}
               label={solution.title}
-            />
-            <figcaption>Concept illustration · Equipment category</figcaption>
+            />}
+            <figcaption>{heroImage ? heroImage.caption ?? "Representative equipment · Model availability requires confirmation" : "Concept illustration · Equipment category"}</figcaption>
           </figure>
         }
         actions={
@@ -86,7 +89,7 @@ export function SolutionDetail({ solution }: { solution: Solution }) {
             description="Category-level information to support a more useful selection conversation."
           />
           <p className="context-note">
-            Illustrations are generic. Models, specifications, and availability
+            Equipment examples are representative. Models, specifications, and availability
             require confirmation.
           </p>
         </div>
@@ -94,10 +97,10 @@ export function SolutionDetail({ solution }: { solution: Solution }) {
           {solution.equipment.map((item) => (
             <article className="equipment-card" key={item.id}>
               <div className="equipment-art">
-                <EquipmentIllustration
+                {equipmentMedia(item.id) ? <ApprovedImage image={equipmentMedia(item.id)} label={item.title} visual={item.visual} /> : <EquipmentIllustration
                   variant={item.visual}
                   label={item.title}
-                />
+                />}
               </div>
               <div className="equipment-copy">
                 <h3>{item.title}</h3>

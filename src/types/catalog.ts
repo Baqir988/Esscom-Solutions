@@ -8,12 +8,17 @@ export interface Publication {
   sourceReference?: string;
 }
 export interface MediaAsset {
+  id?: string;
   src: string;
   alt: string;
   width: number;
   height: number;
   approved: boolean;
   kind: "photograph" | "illustration" | "logo";
+  /** Prebuilt static WebP sources; never requires the Next image API. */
+  sources?: { src: string; width: number; height: number }[];
+  sourceReference?: string;
+  caption?: string;
 }
 export interface Product extends Publication {
   id: string;

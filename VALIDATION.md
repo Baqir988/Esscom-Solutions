@@ -1,5 +1,17 @@
 # ESSCOM validation
 
+## Phase 6 — 27–29 October 2026
+
+The implemented media infrastructure passed explicit TypeScript and ESLint checks, all **28 unit/rendering tests**, production build/static export, export/asset checks and all **32 Chrome/WebKit browser tests** (4.4 minutes). Existing coverage spans 13 routes at nine widths in both engines (234 observations), plus 52 automated accessibility scans. Navigation, mobile focus/Escape, catalog controls, FAQs, pending states and console/runtime checks passed. Static HTTP follow-up on 29 October passed 13 public routes, 15 assets and five custom 404 destinations.
+
+The private media audit passed: **906 originals hash-verified, 616 unique IDs, 502 WebP derivatives** decoded and checked for dimensions, aspect ratio, preserved alpha and removed EXIF/XMP/IPTC metadata. No private manifest/archive references were found in static output. Five filename-based ID collisions were found and fixed before the passing run. Thirteen source contact sheets and five optimized contact sheets received visual review.
+
+Additional Chrome and WebKit private rendering checks passed: correct 320/640px source selection at 1×/2× density for a 240px slot, reserved dimensions, no unnecessary largest-image request, all 634 review-gallery image instances decoded, and no mobile review overflow. These isolated test fixtures are not public website records. Public source-image integration count is **zero**, pending rights/attribution approval; populated product/project galleries and physical-device checks remain approval/device-dependent.
+
+Lighthouse on 29 October (13.5.0, Chrome 156, one cold simulated-mobile navigation per route, local gzip static server) measured Home/Products/Contact Performance **94/98/95**, Accessibility **100/100/100**, Best Practices **100/100/100**, SEO **63/63/63**, LCP **2.57/2.36/2.46 s**, CLS **0/0/0**, and TBT **207/85/177 ms**. Home narrowly misses the LCP target. Noindex is intentional; INP is unmeasured. Source photographs are still private, so these are not measurements of a future approved photo release. See PHASE6_REPORT.md for complete conditions, counts and limitations.
+
+The final initial-page asset check passed with modern JS **150,498 gzip bytes**, CSS **9,280 gzip bytes**, Inter **48,256 bytes**, and HTML **22,507 gzip bytes**. No Vercel deployment or hosted preview test is claimed.
+
 ## Phase 5 — 27 October 2026
 
 Executed locally on Windows with Node 24.17.0, Next.js 16.4.3, installed Chrome 156, Playwright 1.64.1, and Playwright WebKit 27.2. Earlier phase records below are historical; this section supersedes their browser-testing limitations for currently published routes.

@@ -38,6 +38,10 @@ yarn-error.log*
 /artifacts/
 # Internal source-attribution register; retained locally, excluded from public GitHub.
 /CONTENT_VERIFICATION.md
+/MEDIA_INVENTORY.md
+/src/data/media-manifest.json
+# Human source classifications contain unapproved historical brand references.
+/scripts/profile-review.mjs
 /private/
 *.docx
 *.pdf

@@ -4,6 +4,8 @@ import { Card } from "@/components/ui/card";
 import { SolutionIcon } from "@/components/ui/solution-icon";
 import { solutionHref } from "@/data/solutions";
 import type { Solution } from "@/types/solution";
+import { solutionMedia } from "@/data/media";
+import { ApprovedImage } from "@/components/ui/approved-image";
 
 export function SolutionCard({
   solution,
@@ -14,8 +16,10 @@ export function SolutionCard({
   index?: number;
   detailed?: boolean;
 }) {
+  const image = solutionMedia(solution.slug);
   return (
     <Card className="solution-card linked-card">
+      {image && <div className="solution-card-media"><ApprovedImage image={image} label={solution.title} visual={solution.visual} /></div>}
       <div className="card-top">
         <span className="solution-icon">
           <SolutionIcon name={solution.icon} />

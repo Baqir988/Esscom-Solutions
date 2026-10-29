@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { MediaAsset } from "@/types/catalog";
 import type { EquipmentVisual } from "@/types/solution";
 import { EquipmentIllustration } from "./equipment-illustration";
+import { staticMediaSourceSet } from "@/lib/media";
 
 export function ApprovedImage({
   image,
@@ -35,16 +36,25 @@ export function ApprovedImage({
         <small>Image unavailable</small>
       </div>
     );
-  return (
+  const content = (
     <Image
+      unoptimized
       src={image.src}
       alt={image.alt}
       width={image.width}
       height={image.height}
       sizes={sizes}
       loading={priority ? "eager" : "lazy"}
+      fetchPriority={priority ? "high" : undefined}
       className="approved-image"
       onError={() => setFailedSource(image.src)}
     />
   );
+  const sourceSet = staticMediaSourceSet(image);
+  return sourceSet ? (
+    <picture className="responsive-media">
+      <source type="image/webp" srcSet={sourceSet} sizes={sizes} />
+      {content}
+    </picture>
+  ) : content;
 }

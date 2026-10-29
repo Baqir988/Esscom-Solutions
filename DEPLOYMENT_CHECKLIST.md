@@ -1,6 +1,6 @@
 # ESSCOM deployment checklist
 
-Last reviewed: 27 October 2026 (Asia/Karachi).
+Last reviewed: 29 October 2026 (Asia/Karachi).
 
 **Status: staging build prepared locally; not deployed to Vercel.**
 
@@ -70,4 +70,17 @@ Product models, public installation stories, and client/partner identities remai
 - Browser engines on Windows do not replace physical Android/iPhone checks.
 - Approved product/project/gallery/logo routes cannot be tested publicly until approved records exist; templates and selectors are tested with private test fixtures.
 
-Phase 6 has not started. The existing typed MediaAsset, ApprovedImage, and MediaGallery architecture remains ready for separately approved image work.
+Phase 6 extraction and private preparation are implemented: 906 embedded candidates, 616 unique images and 502 WebP variants. Public source-image publication remains pending explicit rights/attribution and placement approval; zero source images are currently published. MediaAsset, ApprovedImage and the central public registry support prebuilt responsive WebP variants. See PHASE6_REPORT.md and the private review gallery before selecting any assets for deployment.
+
+## Phase 6 pre-deployment checks
+
+- [x] Every original preserved privately and hash-verified; exact duplicates identified.
+- [x] Full inventory, machine-readable manifest and private review gallery created.
+- [x] Responsive derivatives checked for decoding, dimensions, transparency and metadata.
+- [x] TypeScript, lint, 28 unit/rendering tests, production export, 32 website browser tests and private media browser checks passed.
+- [x] Final local Lighthouse measurements and HTTP route results recorded.
+- [x] Private archive, human annotations, manifest and inventory excluded from public Git/static output.
+- [ ] Company approves specific media IDs, rights, attribution and placement.
+- [ ] Larger originals supplied for selected low-resolution logo/product images where needed.
+- [ ] Approved variants integrated into public registry and relevant page data, then revalidated.
+- [ ] Authorized Vercel commercial account/project access supplied; preview deployed and verified.

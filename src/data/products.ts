@@ -2,6 +2,7 @@ import type { Product, CatalogItem } from "@/types/catalog";
 import { publishedSolutions, getSolution, solutionHref } from "./solutions";
 import { isApproved } from "../lib/publication";
 import { quoteHref } from "../lib/contact";
+import { equipmentMedia } from "./media";
 
 // Add only reviewed public copy here; keep private/historical source records outside src/.
 export const products: Product[] = [];
@@ -62,6 +63,7 @@ export const equipmentCatalog: CatalogItem[] = publishedSolutions.flatMap(
       category: solution.shortTitle,
       keywords: [solution.title, equipment.title],
       visual: equipment.visual,
+      image: equipmentMedia(equipment.id),
       kind: "equipment-category" as const,
       href: solutionHref(solution.slug),
       quoteHref: quoteHref(equipment.title),

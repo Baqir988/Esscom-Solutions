@@ -1,8 +1,8 @@
 # ESSCOM website
 
-A corporate technology website built through Phases 1-5 with Next.js App Router, React, strict TypeScript, Tailwind CSS, Lucide icons, and locally bundled Inter. The application is frontend-only and exports static files. No database, authentication, API backend, analytics, or non-operational contact form is included.
+A corporate technology website built through Phases 1-5, with Phase 6 media preparation, using Next.js App Router, React, strict TypeScript, Tailwind CSS, Lucide icons, and locally bundled Inter. The application is frontend-only and exports static files. No database, authentication, API backend, analytics, or non-operational contact form is included.
 
-The current release is a **staging/review website**. Contact infrastructure is implemented, but approved ESSCOM contact channels are still missing. Product models, installations, client/partner relationships, legal copy, and company media remain approval-dependent. Phase 6 image extraction/integration has not started.
+The current release is a **staging/review website**. Contact infrastructure is implemented, but approved ESSCOM contact channels are still missing. Product models, installations, client/partner relationships, legal copy, and company media remain approval-dependent. Phase 6 extracted and inventoried every embedded profile image and prepared private WebP derivatives. Public image replacement is pending specific rights/attribution approval; current illustrations are preserved.
 
 ## Setup and local preview
 
@@ -148,3 +148,33 @@ Verify HTTPS, direct/deep links and refresh, custom 404s, assets and prefetched 
 Before indexing: approve the legal/privacy text, company copy, contact channels, asset rights, and required business records; complete physical-device checks and authorize launch. Set NEXT_PUBLIC_SITE_URL to the assigned production .vercel.app origin and SITE_INDEXING=production only then. Rebuild and inspect canonical URLs, sitemap, robots, structured data, and response headers.
 
 A future custom domain must first be purchased/owned and authorized separately. Add it in Vercel Project Settings > Domains, apply Vercel's displayed DNS records, verify HTTPS and redirects, update NEXT_PUBLIC_SITE_URL, and redeploy. No domain purchase or billing change is part of this phase.
+
+## Phase 6 media workflow
+
+See PHASE6_REPORT.md for counts, measurements and remaining approvals. The complete MEDIA_INVENTORY.md, src/data/media-manifest.json, scripts/profile-review.mjs annotations and private/company-profile/ archive are local internal artifacts, excluded from Git and static output. Keep a separate authorized backup of them; a clean public checkout intentionally does not contain the original profile or review material.
+
+The DOCX was found in the user-specified Downloads location, not reference-documents/. The extraction script accepts any explicitly provided source path and never edits that document:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/extract-profile.ps1 -Source 'C:\Users\Lenovo\Downloads\PROFILE TECHNOWORD (NEW)_compressed (2) (1).docx'
+npm run media:inspect
+# Review all contact sheets; maintain the private scripts/profile-review.mjs annotations.
+npm run media:prepare
+npm run check:media
+npm run check:media:browser
+```
+
+Sharp is an explicit development dependency. The extraction uses Windows PowerShell/.NET ZIP/XML APIs. It preserves all original bytes, including exact duplicates, and maps relationships to nearby text, XML sections and cached page segments. Cached segments are not printed page numbers. A different source document requires a fresh visual review and updated classification notes; do not blindly reuse the existing ID annotations.
+
+The local review gallery is private/company-profile/review.html. It links unmodified originals and privately optimized variants. No private source files belong in public/. Do not import media-manifest.json into application code: it includes unapproved historical and personnel context. The website imports only the public allowlist src/data/media.ts.
+
+### Publish a specifically approved image
+
+1. Record the approved asset ID, image rights, ESSCOM attribution, permitted placement and display limitations in the internal approval register. Product-category imagery does not establish model availability/specifications. Projects, people, clients, partners and facilities need their own attribution/consent decisions.
+2. Choose the best reviewed original/derivative, keeping native size and full product framing. Request larger source files where needed; do not upscale. Copy only approved WebP variants into public/images/company-profile/CATEGORY/ with descriptive names.
+3. Add a MediaAsset in approvedMedia in src/data/media.ts with descriptive alt, width/height of the largest variant, approved: true, kind, sourceReference, optional caption, and sources containing each local WebP path with its actual dimensions. The application never calls the Next runtime image API.
+4. Map the asset ID in mediaPlacements.solutions or mediaPlacements.equipment. This updates shared solution cards/detail visuals and equipment cards on the homepage/catalog. Product/project image arrays and approved relationship logos can reuse getApprovedMedia(id); keep their separate publication gates. Do not add a project/client record just to display a photograph.
+5. Keep any hero below its source-size limit. The current low-resolution logo is not a replacement for approved vector artwork. About/Home general visuals remain unchanged until suitable attributed assets exist.
+6. Rebuild and rerun media, export and browser checks, then measure performance before a protected Vercel preview. Update the internal manifest/report to reflect actual approvals and published variants. Actual product/project galleries still need public-route testing once their records are approved.
+
+Responsive WebP selection is browser-native through picture/source; dimensions reserve space, low-priority images are lazy, and missing/unapproved media uses existing fallbacks. No new runtime image/gallery dependency was introduced. Private image checks require the local review archive; normal build, lint, unit tests and website browser tests work without it.
