@@ -70,17 +70,21 @@ Product models, public installation stories, and client/partner identities remai
 - Browser engines on Windows do not replace physical Android/iPhone checks.
 - Approved product/project/gallery/logo routes cannot be tested publicly until approved records exist; templates and selectors are tested with private test fixtures.
 
-Phase 6 extraction and private preparation are implemented: 906 embedded candidates, 616 unique images and 502 WebP variants. Public source-image publication remains pending explicit rights/attribution and placement approval; zero source images are currently published. MediaAsset, ApprovedImage and the central public registry support prebuilt responsive WebP variants. See PHASE6_REPORT.md and the private review gallery before selecting any assets for deployment.
+Phase 6 extraction and private preparation are implemented: 906 embedded candidates, 616 unique images and 502 private WebP variants. Sixteen historical category-reference images (42 responsive WebP files, 775,402 bytes) are now integrated in the public preview with captions. This limited category use does not verify current ESSCOM products or installations. Confirm usage rights and attribution before production release. Installation/project, branding, client, partner, fabrication and other-division media remain unpublished. MediaAsset, ApprovedImage and the central registry support additional responsive media. See PHASE6_REPORT.md and the private review gallery.
 
 ## Phase 6 pre-deployment checks
 
 - [x] Every original preserved privately and hash-verified; exact duplicates identified.
 - [x] Full inventory, machine-readable manifest and private review gallery created.
 - [x] Responsive derivatives checked for decoding, dimensions, transparency and metadata.
-- [x] TypeScript, lint, 28 unit/rendering tests, production export, 32 website browser tests and private media browser checks passed.
-- [x] Final local Lighthouse measurements and HTTP route results recorded.
+- [x] TypeScript, lint, 29 unit/rendering tests, production static export, media provenance/image output checks passed.
+- [x] Static Chrome smoke check: 28 page/viewport combinations across 320, 390, 768 and 1440px; 244 image instances loaded with no horizontal overflow or console errors.
+- [ ] Full Playwright suite after image integration timed out; rerun in an environment with a working local browser harness.
+- [x] Static HTTP route/404 results recorded.
+- [ ] Post-integration Lighthouse measurement: the local Chrome launcher could not connect to Chrome debugging; no final score claimed.
 - [x] Private archive, human annotations, manifest and inventory excluded from public Git/static output.
-- [ ] Company approves specific media IDs, rights, attribution and placement.
-- [ ] Larger originals supplied for selected low-resolution logo/product images where needed.
-- [ ] Approved variants integrated into public registry and relevant page data, then revalidated.
+- [ ] ESSCOM confirms public usage rights/current attribution for the 16 historical category references; captions avoid product-stock or installation claims.
+- [ ] ESSCOM provides higher-resolution replacements for small/soft POS, queue, biometric and signage photos where needed.
+- [x] Sixteen category references integrated into public registry/pages; TypeScript, asset, browser smoke and static export revalidated.
+- [ ] Project/installation, client, partner, official-logo and other-division assets approved separately before publication.
 - [ ] Authorized Vercel commercial account/project access supplied; preview deployed and verified.

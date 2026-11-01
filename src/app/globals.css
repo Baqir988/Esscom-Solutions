@@ -2343,3 +2343,28 @@ main {
   .contact-card { padding: 24px; }
   .inquiry-topics { gap: 28px; }
 }
+
+.solution-card-media {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 0;
+}
+.solution-card-media figcaption,
+.media-caption {
+  display: block;
+  margin-top: 8px;
+  color: #52647b;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.solution-card-media .responsive-media,
+.solution-card-media > .approved-image {
+  display: block;
+  flex: 1;
+  min-height: 0;
+  height: auto;
+}
+.solution-card-media .approved-image {
+  object-fit: contain;
+}

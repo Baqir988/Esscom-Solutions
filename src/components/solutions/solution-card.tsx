@@ -19,7 +19,12 @@ export function SolutionCard({
   const image = solutionMedia(solution.slug);
   return (
     <Card className="solution-card linked-card">
-      {image && <div className="solution-card-media"><ApprovedImage image={image} label={solution.title} visual={solution.visual} /></div>}
+      {image && (
+        <figure className="solution-card-media">
+          <ApprovedImage image={image} label={solution.title} visual={solution.visual} />
+          <figcaption>{image.caption}</figcaption>
+        </figure>
+      )}
       <div className="card-top">
         <span className="solution-icon">
           <SolutionIcon name={solution.icon} />

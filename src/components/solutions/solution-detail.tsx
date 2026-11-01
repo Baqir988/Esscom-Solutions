@@ -105,6 +105,9 @@ export function SolutionDetail({ solution }: { solution: Solution }) {
               <div className="equipment-copy">
                 <h3>{item.title}</h3>
                 <p>{item.description}</p>
+                {equipmentMedia(item.id)?.caption && (
+                  <small className="media-caption">{equipmentMedia(item.id)?.caption}</small>
+                )}
               </div>
             </article>
           ))}

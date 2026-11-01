@@ -46,7 +46,7 @@ export function ProductCard({ item }: { item: CatalogItem }) {
         </div>
         {item.kind === "equipment-category" && (
           <span className="catalog-kind">
-            Equipment category · Model details pending
+            {item.image?.approved ? item.image.caption : "Equipment category · Model details pending"}
           </span>
         )}
       </div>

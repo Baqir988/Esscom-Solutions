@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { staticMediaSourceSet } from "../src/lib/media";
-import { approvedMedia, getApprovedMedia } from "../src/data/media";
+import { approvedMedia, getApprovedMedia, mediaPlacements, solutionMedia, equipmentMedia } from "../src/data/media";
 import { ApprovedImage } from "../src/components/ui/approved-image";
 import type { MediaAsset } from "../src/types/catalog";
 
@@ -45,4 +45,21 @@ test("unapproved media cannot enter the registry selector or image output", () =
     assert.doesNotMatch(html,/test-equipment/);
     assert.match(html,/category illustration/);
   } finally {delete approvedMedia["test-unapproved"];}
+});
+
+test("published profile references cover all five solution categories with historical captions", () => {
+  const slugs=["cctv-surveillance","biometric-access-control","queue-management","point-of-sale","digital-signage"];
+  assert.equal(Object.keys(approvedMedia).length,16);
+  for(const slug of slugs){
+    const image=solutionMedia(slug);
+    assert(image?.approved,`Missing approved category image for ${slug}`);
+    assert(/historical|profile/i.test(image.caption??""));
+    assert(image.sourceAssetId?.startsWith("profile-"));
+  }
+  const mappedEquipment=Object.values(mediaPlacements.equipment);
+  assert(mappedEquipment.length>=15);
+  for(const id of mappedEquipment){
+    const image=equipmentMedia(Object.entries(mediaPlacements.equipment).find(([,mediaId])=>mediaId===id)![0]);
+    assert(image?.approved&&/historical|profile/i.test(image.caption??""));
+  }
 });

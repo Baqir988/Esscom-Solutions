@@ -6,6 +6,7 @@ import sharp from 'sharp';
 import {approvedMedia,mediaPlacements} from '../src/data/media.ts';
 const manifest=JSON.parse(await fs.readFile('src/data/media-manifest.json','utf8'));
 const ids=new Set();const canonical=new Map();const checked=new Set();
+const approvedSourceIds=new Set(Object.values(approvedMedia).map(a=>a.sourceAssetId));
 for(const a of manifest.assets){
   assert(!ids.has(a.id),`Duplicate ID ${a.id}`);ids.add(a.id);
   const raw=await fs.readFile(a.originalPath);
@@ -13,7 +14,8 @@ for(const a of manifest.assets){
   assert.equal(createHash('sha256').update(raw).digest('hex'),a.sha256);
   assert(a.occurrences.length,`Unmapped ${a.id}`);
   assert(a.description&&a.category&&a.publicationStatus&&a.intendedPlacement);
-  assert.equal(a.approved,false,'Source review approval must be explicit and separately recorded');
+  if(approvedSourceIds.has(a.id)){assert.equal(a.approved,true,`Published reference missing explicit status ${a.id}`);assert.equal(a.publicationStatus,'approved-historical-category-reference');assert(a.publicationReason.includes('historical category reference'));}
+  else assert.equal(a.approved,false,'Unselected source must remain unpublished');
   if(a.duplicateOf){assert.equal(canonical.get(a.duplicateOf),a.sha256);}else canonical.set(a.id,a.sha256);
   for(const output of a.optimized){
     if(checked.has(output.path))continue;checked.add(output.path);
@@ -32,6 +34,7 @@ for(const [id,a] of Object.entries(approvedMedia)){
   for(const src of [a.src,...(a.sources??[]).map(s=>s.src)]){
     assert(/^\/images\/company-profile\/[a-zA-Z0-9/_-]+\.webp$/.test(src));
     await fs.access(path.join('public',src));
+    const meta=await sharp(path.join('public',src)).metadata();assert.equal(meta.format,'webp');
   }
 }
 for(const id of Object.values(mediaPlacements).flatMap(group=>Object.values(group)))assert(approvedMedia[id]?.approved,`Unapproved placement ${id}`);
@@ -48,4 +51,5 @@ for(const file of outputFiles){
 }
 assert.equal(manifest.statistics.extracted,manifest.assets.length);
 assert.equal(manifest.statistics.unique,canonical.size);
-console.log(`PASS: ${ids.size} originals hash-verified, ${canonical.size} unique, ${checked.size} derivatives decoded with dimensions/alpha/metadata checked; no private-media export leaks. Public approved assets: ${Object.keys(approvedMedia).length}.`);
+assert.equal(approvedSourceIds.size,16);
+console.log(`PASS: ${ids.size} originals hash-verified, ${canonical.size} unique, ${checked.size} private derivatives checked; ${approvedSourceIds.size} explicitly approved historical category references and all public WebP files verified; no private-media export leaks.`);

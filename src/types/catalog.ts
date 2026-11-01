@@ -9,6 +9,7 @@ export interface Publication {
 }
 export interface MediaAsset {
   id?: string;
+  sourceAssetId?: string;
   src: string;
   alt: string;
   width: number;
@@ -19,6 +20,7 @@ export interface MediaAsset {
   sources?: { src: string; width: number; height: number }[];
   sourceReference?: string;
   caption?: string;
+  websitePlacement?: string;
 }
 export interface Product extends Publication {
   id: string;

@@ -3,9 +3,10 @@ import { launch } from "chrome-launcher";
 import { mkdir, writeFile } from "node:fs/promises";
 
 const origin = process.argv[2] || "http://127.0.0.1:3001";
+const explicitChromePath = process.argv[4] || process.env.CHROME_PATH;
 const label = process.argv[3] || "final";
 await mkdir("artifacts", { recursive: true });
-const chrome = await launch({ chromeFlags: ["--headless=new"] });
+const chrome = await launch({ chromeFlags: ["--headless=new"], chromePath: explicitChromePath });
 const records = [];
 try {
   for (const path of ["/", "/products/", "/contact/"]) {

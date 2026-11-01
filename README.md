@@ -2,7 +2,7 @@
 
 A corporate technology website built through Phases 1-5, with Phase 6 media preparation, using Next.js App Router, React, strict TypeScript, Tailwind CSS, Lucide icons, and locally bundled Inter. The application is frontend-only and exports static files. No database, authentication, API backend, analytics, or non-operational contact form is included.
 
-The current release is a **staging/review website**. Contact infrastructure is implemented, but approved ESSCOM contact channels are still missing. Product models, installations, client/partner relationships, legal copy, and company media remain approval-dependent. Phase 6 extracted and inventoried every embedded profile image and prepared private WebP derivatives. Public image replacement is pending specific rights/attribution approval; current illustrations are preserved.
+The current release is a **staging/review website**. Contact infrastructure is implemented, but approved ESSCOM contact channels are still missing. Product models, installations, client/partner relationships, and legal copy remain approval-dependent. Phase 6 extracted every embedded profile image and prepared private WebP derivatives. Sixteen category references are visible on the home, solutions, and equipment catalog pages as historical profile imagery, with captions clarifying that ESSCOM availability and installation attribution are unverified. Confirm usage rights before production release. Project, client, partner, brand-logo, factory, and other-division images remain unpublished.
 
 ## Setup and local preview
 
@@ -56,7 +56,7 @@ Lighthouse uses one cold navigation per representative route, default simulated 
 - src/types/: typed records, media, publication gates, and contact data.
 - src/lib/: search/filter logic, contact URLs, publication selectors, deployment policy, metadata, route inventory.
 - src/hooks/: hydration readiness and mobile dialog behavior.
-- public/images/, public/logos/, public/icons/: approved local assets.
+- public/images/, public/logos/, public/icons/: approved local assets, including 16 category-reference profile images with 42 local responsive WebP variants.
 - scripts/: static compatibility, export/link checks, local server, performance measurement.
 - tests/: unit/rendering tests plus tests/e2e/ browser coverage.
 
@@ -90,7 +90,7 @@ src/lib/contact.ts normalizes telephone/WhatsApp numbers without guessing a coun
 
 ### Images and fonts
 
-Current visuals are original SVG/HTML illustrations and a 219-byte SVG favicon; there are no raster photos to recompress. Inter is one local variable WOFF2 (48,256 bytes) with swap display. Avoid adding remote font requests.
+Current media includes original SVG/HTML illustrations and 16 optimized historical category-reference images (42 responsive WebP variants, 775,402 bytes in total), plus a 219-byte SVG favicon. Inter is one local variable WOFF2 (48,256 bytes) with swap display. Avoid adding remote font requests.
 
 Future approved assets should be resized and compressed to appropriate WebP/AVIF dimensions before entering public/. Store src, alt, width, height, approved, and kind in MediaAsset. Keep aspect ratios reserved. ApprovedImage provides lazy loading and error fallback; MediaGallery supports approved thumbnails. The static export does not use a Next image optimization server. Do not bulk-extract the company profile in Phase 5.
 
@@ -160,6 +160,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/extract-profile.ps1 
 npm run media:inspect
 # Review all contact sheets; maintain the private scripts/profile-review.mjs annotations.
 npm run media:prepare
+npm run media:publish
 npm run check:media
 npm run check:media:browser
 ```
@@ -171,9 +172,9 @@ The local review gallery is private/company-profile/review.html. It links unmodi
 ### Publish a specifically approved image
 
 1. Record the approved asset ID, image rights, ESSCOM attribution, permitted placement and display limitations in the internal approval register. Product-category imagery does not establish model availability/specifications. Projects, people, clients, partners and facilities need their own attribution/consent decisions.
-2. Choose the best reviewed original/derivative, keeping native size and full product framing. Request larger source files where needed; do not upscale. Copy only approved WebP variants into public/images/company-profile/CATEGORY/ with descriptive names.
-3. Add a MediaAsset in approvedMedia in src/data/media.ts with descriptive alt, width/height of the largest variant, approved: true, kind, sourceReference, optional caption, and sources containing each local WebP path with its actual dimensions. The application never calls the Next runtime image API.
-4. Map the asset ID in mediaPlacements.solutions or mediaPlacements.equipment. This updates shared solution cards/detail visuals and equipment cards on the homepage/catalog. Product/project image arrays and approved relationship logos can reuse getApprovedMedia(id); keep their separate publication gates. Do not add a project/client record just to display a photograph.
+2. Choose the best reviewed original/derivative, keeping native size and full product framing. Request larger source files where needed; do not upscale. The current `npm run media:publish` publishes the 16 specifically selected, captioned category references to `public/images/company-profile/`. Review its source list, placement captions, and rights before adapting it for any additional selection.
+3. Keep each public `MediaAsset` in `src/data/media.ts` with descriptive alt, verified native width/height, `approved: true`, `kind`, `sourceAssetId`, `sourceReference`, a clearly qualified caption, and local responsive variants. The application never calls the Next runtime image API.
+4. Map the asset ID in `mediaPlacements.solutions` or `mediaPlacements.equipment`. This updates shared solution cards/detail visuals and equipment cards on the homepage/catalog. Product/project image arrays and approved relationship logos can reuse `getApprovedMedia(id)`; keep their separate publication gates. Do not add a project/client record just to display a photograph.
 5. Keep any hero below its source-size limit. The current low-resolution logo is not a replacement for approved vector artwork. About/Home general visuals remain unchanged until suitable attributed assets exist.
 6. Rebuild and rerun media, export and browser checks, then measure performance before a protected Vercel preview. Update the internal manifest/report to reflect actual approvals and published variants. Actual product/project galleries still need public-route testing once their records are approved.
 

@@ -23,7 +23,8 @@
     "media:inspect": "node scripts/inspect-profile.mjs",
     "media:prepare": "node scripts/prepare-profile-media.mjs",
     "check:media": "node --import ./scripts/register-typescript.mjs scripts/check-media.mjs",
-    "check:media:browser": "node --import ./scripts/register-typescript.mjs scripts/check-media-browser.mjs"
+    "check:media:browser": "node --import ./scripts/register-typescript.mjs scripts/check-media-browser.mjs",
+    "media:publish": "node scripts/publish-profile-category-images.mjs"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",

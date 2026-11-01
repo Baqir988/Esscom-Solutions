@@ -1,6 +1,6 @@
 # ESSCOM Phase 6 media report
 
-Updated 29 October 2026 (Asia/Karachi). Extraction, private optimization, media infrastructure and regression testing are implemented. **Public source-image integration remains pending company approval. No Vercel deployment was performed.**
+Updated 1 November 2026 (Asia/Karachi). Extraction and optimization are complete, and 16 historical category-reference images are now integrated into the public preview UI with explicit attribution/availability captions. Project, client, partner, branding and other-division assets remain withheld pending specific review. No Vercel deployment was performed.
 
 ## Complete extraction and inventory
 
@@ -13,12 +13,13 @@ The supplied DOCX was found at `C:\Users\Lenovo\Downloads\PROFILE TECHNOWORD (NE
 | Exact duplicate files, preserved privately | 290 |
 | Unique images privately optimized | 221 |
 | Responsive WebP files generated | 502 |
-| Source images integrated publicly | **0** |
-| Unique relevant candidates awaiting specific approval | 105 |
+| Unique historical category-reference images integrated publicly | **16** |
+| Responsive WebP files published for those images | **42** |
+| Other unique category/branding/project/partner candidates awaiting specific approval | 89 |
 | Unique other-division/context, fabrication, stock or ambiguous assets withheld | 116 |
 | Unique rasterized text/decorative fragments excluded from website placement | 395 |
 
-The unique-image categories sum to 616; duplicates are counted separately. Withheld assets are preserved, not deleted. A visual review of all 13 original contact sheets covered all 616 unique images; exact duplicates inherit their identical image's assessment. Five derivative sheets cover the 221 optimized images. Automated checks verify every original hash and every generated derivative. Five same-basename PNG/JPEG collisions were fixed with distinct inventory IDs.
+Sixteen category images are approved for the narrow, captioned historical-reference use shown on the website; this does not verify present ESSCOM supply, model identity, product specifications, legal ownership or a client installation. The remaining 89 relevant candidates are unpublished. The unique-image categories sum to 616; duplicates are counted separately. Withheld assets are preserved, not deleted. A visual review of all 13 original contact sheets covered all 616 unique images; exact duplicates inherit their identical image's assessment. Five derivative sheets cover the 221 optimized images. Automated checks verify every original hash and every generated derivative. Five same-basename PNG/JPEG collisions were fixed with distinct inventory IDs.
 
 The complete internal deliverables are [MEDIA_INVENTORY.md](MEDIA_INVENTORY.md), [src/data/media-manifest.json](src/data/media-manifest.json), and the [private review gallery](private/company-profile/review.html). The gallery contains 18 proposed selections and all unique originals. Originals, derivatives, manifest, inventory and human source annotations are excluded from public Git. Keep an authorized private backup.
 
@@ -42,9 +43,9 @@ PNG/JPEG sources were converted to WebP, using lossless encoding for logo/diagra
 
 ## Website changes and publication boundaries
 
-- Added the centralized public allowlist and placement mappings in `src/data/media.ts`; it currently contains no approved assets. The private manifest is never imported into the application.
+- Added the centralized public allowlist and placement mappings in `src/data/media.ts` for 16 captioned historical profile references. The private manifest is never imported into the application.
 - Extended `MediaAsset`, `ApprovedImage` and gallery styling for static responsive WebP sources, dimensions, meaningful alt text, lazy loading, priority handling and existing fallbacks. Browser-native `picture/source` selection avoids the Next runtime image API. `scale-down` avoids enlarging small originals.
-- Connected the shared Home/Solutions cards, solution-detail hero/equipment visuals, and Home/Products equipment cards to approved media selectors. Existing illustrations remain visible because the publication list is empty.
+- Connected the shared Home/Solutions cards, solution-detail hero/equipment visuals, and Home/Products equipment cards to the public media selectors. Representative photographs/illustrations now appear on the home page, solutions directory and detail pages, and equipment-category catalog.
 - Existing product/project galleries can reuse approved media records without new dependencies. No product models, project records, logos, partner relationships, factory ownership claims, specifications or contacts were fabricated.
 - About, Contact, general homepage hero, Projects and Clients/Partners receive no source photographs until suitable attributed assets and records are approved. The website design and static-export architecture are preserved.
 
@@ -62,16 +63,17 @@ The following checks were executed on the Phase 6 changes (27 October, with fina
 | Production build | PASS; static export generated, with all existing routes preserved. |
 | Export audit | PASS; 16 HTML outputs, 32 unique local link/asset targets, 12 content routes with metadata and indexing policy. |
 | Media provenance/derivatives | PASS; 906 original hashes, 616 unique IDs, 502 WebP outputs, dimensions, aspect ratios, alpha and stripped metadata; no private-media references in static output. |
-| Website browser suite | PASS; 32 Chrome/WebKit tests in 4.4 minutes, 234 route/viewport observations and 52 automated accessibility scans. |
+| Full Playwright regression suite after photo integration | Attempted on 1 November, but the tool call exceeded its 300-second limit; not counted as a pass. Earlier 32-test result predates this integration. |
+| Static Chrome image/layout smoke check | PASS; homepage, Products, and five solution detail routes at 320, 390, 768 and 1440px (28 route/viewport checks); all rendered images decoded, no horizontal overflow or console/page errors. |
 | Private media browser checks | PASS in Chrome and WebKit; 1×/2× responsive selection, reserved dimensions, no unnecessary largest-source request, all 634 private review image instances decoded, mobile review fits. |
-| Static HTTP checks | PASS on 29 October; 13 public routes and 15 assets return 200, five missing/unpublished routes return custom 404s. |
+| Static route/asset check | PASS after integration; 13 direct routes, 15 HTML/navigation assets, and 5 missing/unpublished routes return expected 404s. The 42 published WebP variants are independently verified and loaded in Chrome. |
 | Asset budget | PASS; 150,498 gzip bytes modern JavaScript, 9,280 gzip bytes CSS, 48,256 font bytes and 22,507 gzip bytes homepage HTML. |
 
-Website browser checks include navigation/mobile focus and Escape, search/filter/sort/reset/counts, FAQ keyboard use, pending states, images, console/runtime errors, reduced motion and widths 320/360/390/430/768/1024/1280/1440/1920. Private media checks use isolated local fixtures, never public test routes or fake business records. Public product/project gallery selection with approved records and physical Android/iPhone testing remain pending. Contact encoding and missing-channel behavior are tested; no actual messages or calls were sent.
+Website browser checks include navigation/mobile focus and Escape, search/filter/sort/reset/counts, FAQ keyboard use, pending states, images, console/runtime errors, reduced motion and widths 320/360/390/430/768/1024/1280/1440/1920. Private media checks use isolated local fixtures, never public test routes or fake business records. Published category photos were visually checked in Chrome at 320, 390, 768 and 1440 CSS-pixel widths. Public product/project galleries remain empty pending approved records, and physical Android/iPhone testing remains pending. Contact encoding and missing-channel behavior are tested; no actual messages or calls were sent.
 
 ### Performance measured 29 October
 
-Lighthouse 13.5.0, Chrome 156 on Windows, one cold navigation per route, default simulated mobile throttling, local static HTTP with gzip and immutable hashed-asset caching. No other browser audit or image-optimization job was running. Raw reports are retained in ignored `artifacts/lighthouse-phase6-*.json` and `artifacts/performance-phase6.json`.
+Lighthouse 13.5.0, Chrome 156 on Windows, one cold navigation per route, default simulated mobile throttling, local static HTTP with gzip and immutable hashed-asset caching. These measurements were taken before publishing the 16 profile images; they are not final measurements for the updated media selection. A post-integration run was attempted, but Lighthouse’s Chrome launcher failed to connect to the installed Chrome remote-debugging endpoint (`ECONNREFUSED`); no post-integration score is claimed. Raw reports are retained in ignored `artifacts/lighthouse-phase6-*.json` and `artifacts/performance-phase6.json`.
 
 | Route | Performance | Accessibility | Best practices | SEO | LCP | CLS | TBT |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -79,10 +81,10 @@ Lighthouse 13.5.0, Chrome 156 on Windows, one cold navigation per route, default
 | Products | 98 | 100 | 100 | 63 | 2.36 s | 0 | 85 ms |
 | Contact | 95 | 100 | 100 | 63 | 2.46 s | 0 | 177 ms |
 
-Home LCP is slightly above the 2.5-second target. **INP was not measured**; TBT is not INP. SEO reflects intentional staging noindex. These are single-run local lab measurements, not deployed/real-user metrics or proof of complete accessibility conformance. No source photographs are public yet, so their eventual page-load effect must be measured after approval and integration. Small differences from Phase 5 should not be interpreted as proven optimization gains.
+Home LCP is slightly above the 2.5-second target. **INP was not measured**; TBT is not INP. SEO reflects intentional staging noindex. These are single-run local lab measurements, not deployed/real-user metrics or proof of complete accessibility conformance. The published 16-image selection totals 775,402 bytes across responsive variants; measure page-level performance against a deployed preview before release. Small differences from Phase 5 should not be interpreted as proven optimization gains.
 
 ## Deployment and remaining approval steps
 
 No authorized Vercel account/project link or token is configured, and no Git remote is configured. **Actual preview URL: none.** No production promotion, billing change or domain purchase was performed. README and DEPLOYMENT_CHECKLIST.md contain the exact commercial-team preview steps. Keep staging noindex and deployment protection enabled.
 
-To complete public image integration, approve specific asset IDs and placements from the private gallery, confirm usage rights and ESSCOM attribution, supply larger source files where required, and separately approve project/client/partner/facility records. Then copy only those approved variants into `public/images/company-profile/`, populate the public media registry/mappings, rerun checks and deploy a protected preview using the authorized team. Pending review is not approval; this report does not mark public integration as complete.
+To extend public image use, confirm rights and current ESSCOM attribution for the selected historical references, supply higher-resolution replacements where required, and separately approve project/client/partner/facility records. Installation photographs and logos remain private. Re-run checks and deploy a protected preview using the authorized team after business approval.
