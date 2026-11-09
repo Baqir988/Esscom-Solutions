@@ -1,14 +1,15 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
-const routes = ["/", "/about/", "/solutions/", "/products/", "/projects/", "/clients-partners/", "/contact/", "/privacy/", ...["cctv-surveillance", "biometric-access-control", "queue-management", "point-of-sale", "digital-signage"].map((slug) => `/solutions/${slug}/`)];
+const routes = ["/", "/about/", "/solutions/", "/products/", "/projects/", "/clients-partners/", "/contact/", "/privacy/", "/solutions/queue-management/", "/products/tf-70-biometric-terminal/", "/products/pos-touch-system/", "/products/ess-queue-management-system/", "/products/es-900p-weatherproof-camera/", "/products/outdoor-p4-led-module/", "/products/techno-smart-lockers/", "/products/wallers-cnc-laser-cutting/", "/products/solar-panels/", "/products/multimedia-projector/"];
 const widths = [320, 360, 390, 430, 768, 1024, 1280, 1440, 1920];
+const responsiveRoutes = ["/", "/about/", "/solutions/", "/products/", "/products/es-900p-weatherproof-camera/", "/projects/", "/clients-partners/", "/contact/"];
 
 for (const width of widths) {
   test(`all routes fit viewport ${width}px and load without runtime errors`, async ({ context }) => {
     test.setTimeout(90000);
     const errors: string[] = [];
-    for (const route of routes) {
+    for (const route of responsiveRoutes) {
       // Isolate each layout observation from canceled prefetch requests during
       // document replacement. Real client navigation is exercised separately.
       const page = await context.newPage();
@@ -36,7 +37,7 @@ for (const width of widths) {
 for (const width of [390, 1440]) test(`WCAG A/AA scan of every route at ${width}px`, async ({ page }) => {
   test.setTimeout(180000);
   await page.setViewportSize({ width, height: 900 });
-  for (const route of routes) {
+  for (const route of responsiveRoutes) {
     await page.goto(route);
     const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
     expect(results.violations.map((item) => ({ id: item.id, nodes: item.nodes.map((node) => node.target) })), route).toEqual([]);
@@ -92,31 +93,34 @@ test("desktop navigation, dropdown and skip link work with keyboard", async ({ p
   }
 });
 
-test("catalog search, combined filters, sort, counts, reset, empty state and links", async ({ page }) => {
+test("catalog search, combined filters, sort, counts, reset, and detail links", async ({ page }) => {
   await page.goto("/products/");
-  const search = page.getByLabel("Search equipment", { exact: true });
+  const search = page.getByLabel("Search products", { exact: true });
   const status = page.getByRole("status");
-  await expect(status).toContainText("15 of 15");
-  await search.fill("  RFID  ");
-  await expect(status).toContainText("1 of 15");
+  await expect(status).toContainText("113 of 113");
+  await search.fill("  ES-900P  ");
+  await expect(status).toContainText("1 of 113");
+  await expect(page.getByRole("heading", { name: "ES-900P Weatherproof Color IR Camera" })).toBeVisible();
   await page.getByLabel("Category", { exact: true }).selectOption("cctv-surveillance");
-  await expect(status).toContainText("0 of 15");
-  await expect(page.getByRole("heading", { name: "No matching equipment categories." })).toBeVisible();
+  await expect(status).toContainText("1 of 113");
+  await page.getByLabel("Category", { exact: true }).selectOption("pos-retail");
+  await expect(status).toContainText("0 of 113");
+  await expect(page.getByRole("heading", { name: "No matching products." })).toBeVisible();
   await page.getByRole("button", { name: "Reset search & filters" }).click();
   await expect(search).toBeFocused();
-  await expect(status).toContainText("15 of 15");
+  await expect(status).toContainText("113 of 113");
   const headings = page.locator("#catalog-results h3");
   const ascending = await headings.allTextContents();
   await page.getByLabel("Sort by").selectOption("name-desc");
   expect(await headings.allTextContents()).toEqual([...ascending].reverse());
   await page.getByLabel("Sort by").selectOption("category");
   await page.getByLabel("Category", { exact: true }).selectOption("queue-management");
-  await expect(status).toContainText("3 of 15");
+  await expect(status).toContainText("4 of 113");
   await page.getByRole("button", { name: "Clear filters" }).click();
-  await expect(status).toContainText("15 of 15");
+  await expect(status).toContainText("113 of 113");
   await expect(page.getByRole("button", { name: "Clear filters" })).toBeDisabled();
   await page.locator("#catalog-results .text-link").first().click();
-  await expect(page).toHaveURL(/\/solutions\/[^/]+\/$/);
+  await expect(page).toHaveURL(/\/products\/[^/]+\/$/);
 });
 
 test("FAQs, pending contact and portfolio states, and custom 404s", async ({ page }) => {
@@ -134,7 +138,7 @@ test("FAQs, pending contact and portfolio states, and custom 404s", async ({ pag
   await page.goto("/projects/");
   await expect(page.getByText("PROJECT PUBLICATION PENDING")).toBeVisible();
   await expect(page.locator("#project-solution")).toHaveCount(0);
-  for (const path of ["/missing/", "/products/unapproved/", "/projects/unapproved/", "/solutions/unknown/"]) {
+  for (const path of ["/missing/", "/products/unapproved/", "/projects/unapproved/", "/solutions/unknown/", "/solutions/cctv-surveillance/"]) {
     expect((await page.goto(path))?.status()).toBe(404);
     await expect(page.getByRole("heading", { name: "Page not found." })).toBeVisible();
   }

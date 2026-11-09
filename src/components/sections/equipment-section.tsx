@@ -12,8 +12,8 @@ export function EquipmentSection() {
           title="The components behind the solution."
           description={
             publishedProducts.length
-              ? "Explore published equipment across our technology categories."
-              : "Get to know the equipment categories that support everyday operations."
+              ? "Browse equipment shown in the supplied company profile. Division ownership and current availability are identified for each reference."
+              : "Explore equipment categories and their documented profile references."
           }
         />
         <SecondaryButton href="/products/" arrow>
@@ -21,6 +21,7 @@ export function EquipmentSection() {
         </SecondaryButton>
       </div>
       <ProductGrid items={featuredCatalogItems} />
+      <p className="content-note">These are historical profile references, not confirmation of current ESSCOM stock or capability.</p>
     </SectionWrapper>
   );
 }

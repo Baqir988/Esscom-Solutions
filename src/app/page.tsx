@@ -8,16 +8,16 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { SystemIllustration } from "@/components/ui/system-illustration";
 import { ConnectedSystems } from "@/components/ui/connected-systems";
 import { ContactCTA } from "@/components/ui/contact-cta";
-import { SolutionGrid } from "@/components/solutions/solution-card";
+import { ProductGrid } from "@/components/catalog/product-card";
+import { featuredCatalogItems } from "@/data/products";
 import { IndustrySection } from "@/components/sections/industry-section";
 import { EquipmentSection } from "@/components/sections/equipment-section";
 import { ProjectPreview } from "@/components/sections/project-preview";
 import { ClientPartnerPreview } from "@/components/sections/client-partner-preview";
 import { WhyEsscom } from "@/components/sections/why-esscom";
-import { publishedSolutions } from "@/data/solutions";
 import { companyIntroduction, capabilityHighlights } from "@/data/company";
 
-export const metadata = pageMetadata("ESSCOM | Technology, Security & Automation Solutions", "Explore ESSCOM security, attendance, queue management, point-of-sale, and digital signage solutions for modern organizations.", "/");
+export const metadata = pageMetadata("ESSCOM | Company Profile & Equipment", "Browse equipment and technology references from the supplied Techno World International profile, with division attribution and current availability clearly distinguished.", "/");
 export default function Home() {
   return (
     <>
@@ -36,8 +36,7 @@ export default function Home() {
                 <span>Better Operations.</span>
               </h1>
               <p className="hero-description">
-                Explore technology, security, and automation solutions designed
-                to support modern organizations and their operational needs.
+                The supplied profile identifies an ESS-Queue Management System and shows a display marked Powered by ESSCOM Solutions.
               </p>
               <div className="hero-actions">
                 <PrimaryButton href="/solutions/">
@@ -49,16 +48,16 @@ export default function Home() {
               </div>
               <div className="hero-footnote">
                 <span className="small-rule" />
-                Security & surveillance <span aria-hidden="true">/</span>{" "}
-                Business automation
+                Queue tickets <span aria-hidden="true">/</span>{" "}
+                Counter displays
               </div>
             </div>
             <SystemIllustration />
           </div>
           <div className="hero-bottom">
             <span>
-              ESSCOM <span className="hero-bottom-separator">/</span> CONNECTING
-              TECHNOLOGY TO EVERYDAY OPERATIONS
+              ESSCOM <span className="hero-bottom-separator">/</span> QUEUE MANAGEMENT
+              PROFILE REFERENCE
             </span>
             <Link href="#core-solutions">
               Discover the possibilities{" "}
@@ -73,16 +72,16 @@ export default function Home() {
       >
         <div className="section-top">
           <SectionHeading
-            eyebrow="OUR CORE SOLUTIONS"
-            title="Purposeful technology. Practical possibilities."
-            description="Five areas of technology, connected by a focus on everyday organizational needs."
+            eyebrow="PROFILE-SOURCED CATEGORIES"
+            title="Technology and equipment referenced in the profile."
+            description="The wider company document lists equipment across security, attendance, retail, display, and office categories. Each catalog record distinguishes ESSCom-specific references, other divisions, and ownership that remains unconfirmed."
             id="core-solutions-heading"
           />
-          <Link className="text-link" href="/solutions/">
-            View all solutions <ArrowUpRight size={18} aria-hidden="true" />
+          <Link className="text-link" href="/products/">
+            Explore the product catalog <ArrowUpRight size={18} aria-hidden="true" />
           </Link>
         </div>
-        <SolutionGrid solutions={publishedSolutions} />
+        <ProductGrid items={featuredCatalogItems} />
       </SectionWrapper>
       <SectionWrapper className="section-white">
         <div className="split-layout about-intro">
@@ -90,7 +89,7 @@ export default function Home() {
           <div className="editorial-copy">
             <SectionHeading
               eyebrow="ABOUT ESSCOM"
-              title="Technology solutions for modern organizations."
+              title="Company profile context, carefully separated."
             />
             {companyIntroduction.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>

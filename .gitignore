@@ -52,3 +52,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Internal approval and source-audit reports.
+/HIGH_RESOLUTION_ASSETS_REQUIRED.md
+/PORTFOLIO_AND_PARTNER_APPROVAL.md
+/ESSCOM_FINAL_CONTENT_AND_MEDIA_AUDIT.md

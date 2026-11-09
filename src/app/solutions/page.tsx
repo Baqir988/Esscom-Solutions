@@ -10,14 +10,14 @@ import { ConnectedSystems } from "@/components/ui/connected-systems";
 import { SolutionGrid } from "@/components/solutions/solution-card";
 import { IndustrySection } from "@/components/sections/industry-section";
 
-export const metadata = pageMetadata("Technology Solutions", "Find ESSCOM solution guides for CCTV, biometric attendance and access control, queue management, point of sale, and digital signage.", "/solutions/");
+export const metadata = pageMetadata("Queue Management Solution", "Review the queue-management system specifically identified in the supplied profile.", "/solutions/");
 export default function SolutionsPage() {
   return (
     <>
       <PageHero
         eyebrow="ESSCOM SOLUTIONS"
         title="Find the technology that fits your environment."
-        description="Explore security, automation, and communication systems through the operational needs they can support."
+        description="Explore the ESS-Queue Management System reference and its ticketing and counter-display concepts."
         breadcrumbs={[
           { label: "Home", href: "/" },
           { label: "Solutions", href: "/solutions/" },
@@ -34,7 +34,7 @@ export default function SolutionsPage() {
           <SectionHeading
             eyebrow="THE SOLUTION DIRECTORY"
             title="Start with what your organization needs to do."
-            description="Observe a space. Record attendance. Organize a queue. Handle a transaction. Communicate clearly. Each guide connects an operational need to relevant equipment and selection considerations."
+            description="The profile identifies the ESS-Queue Management System. Other categories in the broader document are excluded from the public directory pending division and service-scope confirmation."
           />
         </div>
         <SolutionGrid solutions={publishedSolutions} detailed />
@@ -54,11 +54,7 @@ export default function SolutionsPage() {
               title="Individual devices. A shared environment."
             />
             <p>
-              Technology rarely operates in isolation. A reception area may need
-              a queue display and visitor information. An office may need
-              attendance records, controlled entry, and camera coverage.
-              Considering these needs together helps identify connections and
-              boundaries before equipment is selected.
+              Technology rarely operates in isolation. A service area may need ticket issuing, a queue display, and visitor information. Considering how those parts fit the service flow can help identify requirements and boundaries before equipment is selected.
             </p>
             <p>
               An integrated view is a planning approach, not a promise that

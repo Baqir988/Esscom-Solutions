@@ -1,10 +1,7 @@
 import {
   Landmark,
   HeartPulse,
-  GraduationCap,
   Building2,
-  BriefcaseBusiness,
-  Store,
 } from "lucide-react";
 import { industries } from "@/data/industries";
 import { SectionWrapper } from "@/components/ui/section-wrapper";
@@ -12,10 +9,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 const icons = {
   bank: Landmark,
   health: HeartPulse,
-  education: GraduationCap,
   public: Building2,
-  office: BriefcaseBusiness,
-  retail: Store,
 };
 export function IndustrySection({
   title = "Different environments. Shared operational needs.",

@@ -2,7 +2,7 @@ import type { NavigationItem, SiteConfig } from "@/types/site";
 export const siteConfig: SiteConfig = {
   name: "ESSCOM",
   description:
-    "Technology, security, and automation solutions for modern organizations.",
+    "ESSCOM company profile and equipment references, with division attribution and current availability identified separately.",
   // Company-approved ESSCOM details only. Phone numbers must include country codes.
   contact: { email: null, phone: null, whatsapp: null, address: null, mapsUrl: null },
   socialLinks: [],

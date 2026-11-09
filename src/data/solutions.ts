@@ -8,7 +8,7 @@ export const solutions: Solution[] = [
     shortTitle: "CCTV & Surveillance",
     icon: "camera",
     visual: "camera",
-    published: true,
+    published: false,
     shortDescription:
       "Bring visibility to entrances, shared spaces, and site activity with cameras, recording equipment, and monitoring systems.",
     metaDescription:
@@ -141,7 +141,7 @@ export const solutions: Solution[] = [
     shortTitle: "Attendance & Access",
     icon: "fingerprint",
     visual: "biometric",
-    published: true,
+    published: false,
     shortDescription:
       "Connect attendance recording and entry requirements with biometric terminals, RFID readers, and access-control equipment.",
     metaDescription:
@@ -402,7 +402,7 @@ export const solutions: Solution[] = [
     shortTitle: "Point of Sale",
     icon: "pos",
     visual: "pos",
-    published: true,
+    published: false,
     shortDescription:
       "Build a practical transaction workspace with POS terminals, barcode scanners, receipt printers, and supporting hardware.",
     metaDescription:
@@ -534,7 +534,7 @@ export const solutions: Solution[] = [
     shortTitle: "Digital Signage",
     icon: "display",
     visual: "display",
-    published: true,
+    published: false,
     shortDescription:
       "Make information visible with digital signage and LED/SMD displays suited to shared, commercial, and public-facing spaces.",
     metaDescription:

@@ -11,11 +11,7 @@ const pages = [
   "/clients-partners/",
   "/contact/",
   "/privacy/",
-  "/solutions/cctv-surveillance/",
-  "/solutions/biometric-access-control/",
   "/solutions/queue-management/",
-  "/solutions/point-of-sale/",
-  "/solutions/digital-signage/",
 ];
 const assets = new Set();
 assets.add("/robots.txt");
@@ -45,6 +41,10 @@ for (const asset of assets) {
 for (const path of [
   "/missing-page/",
   "/solutions/unknown/",
+  "/solutions/cctv-surveillance/",
+  "/solutions/biometric-access-control/",
+  "/solutions/point-of-sale/",
+  "/solutions/digital-signage/",
   "/solutions/it-communication/",
   "/products/unapproved/",
   "/projects/unapproved/",
@@ -57,5 +57,5 @@ for (const path of [
   );
 }
 console.log(
-  `PASS: ${pages.length} direct routes, ${assets.size} static assets, and 5 missing/unpublished-route 404s at ${origin}.`,
+  `PASS: ${pages.length} direct routes, ${assets.size} static assets, and 9 missing/unpublished-route 404s at ${origin}.`,
 );

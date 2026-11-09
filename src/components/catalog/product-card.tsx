@@ -44,6 +44,7 @@ export function ProductCard({ item }: { item: CatalogItem }) {
             </a>
           )}
         </div>
+        {item.attributionLabel && <span className="catalog-kind">{item.attributionLabel} · profile reference</span>}
         {item.kind === "equipment-category" && (
           <span className="catalog-kind">
             {item.image?.approved ? item.image.caption : "Equipment category · Model details pending"}

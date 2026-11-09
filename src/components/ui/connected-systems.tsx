@@ -1,38 +1,25 @@
-import { ArrowRight, Layers3 } from "lucide-react";
-import { SolutionIcon } from "./solution-icon";
+import { ArrowRight, ListOrdered, Monitor, Ticket } from "lucide-react";
+
 export function ConnectedSystems() {
   return (
     <figure className="connected-systems">
       <div className="diagram-heading">
-        <span className="micro-label">A CONNECTED VIEW</span>
-        <Layers3 size={20} aria-hidden="true" />
+        <span className="micro-label">QUEUE MANAGEMENT CONCEPT</span>
+        <ListOrdered size={20} aria-hidden="true" />
       </div>
       <div className="system-node">
-        <SolutionIcon name="camera" />
-        <div>
-          <strong>Spaces</strong>
-          <span>Visibility & controlled entry</span>
-        </div>
+        <Ticket aria-hidden="true" />
+        <div><strong>Ticket</strong><span>A place in the service sequence</span></div>
       </div>
       <div className="system-node">
-        <SolutionIcon name="fingerprint" />
-        <div>
-          <strong>People</strong>
-          <span>Attendance & service journeys</span>
-        </div>
-      </div>
-      <div className="system-node">
-        <SolutionIcon name="display" />
-        <div>
-          <strong>Operations</strong>
-          <span>Transactions & communication</span>
-        </div>
+        <Monitor aria-hidden="true" />
+        <div><strong>Queue display</strong><span>Information for the waiting area</span></div>
       </div>
       <div className="diagram-result">
-        One considered environment <ArrowRight size={18} aria-hidden="true" />
+        Visitor to service counter <ArrowRight size={18} aria-hidden="true" />
       </div>
       <figcaption>
-        Conceptual relationship between technology categories.
+        Concept illustration · not a real ESSCOM installation or product model.
       </figcaption>
     </figure>
   );

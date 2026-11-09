@@ -10,7 +10,7 @@ import { isApproved, officialWebsite } from "../src/lib/publication";
 import { productInquiryHref } from "../src/lib/inquiry";
 import {
   catalogItems,
-  equipmentCatalog,
+  productCountByCategory,
   products,
   publishedProducts,
   selectPublishedProducts,
@@ -25,7 +25,6 @@ import {
 } from "../src/data/projects";
 import { clients, publishedClients } from "../src/data/clients";
 import { partners, publishedPartners } from "../src/data/partners";
-import { publishedSolutions } from "../src/data/solutions";
 import { createValidFileMatcher } from "next/dist/server/lib/find-page-file.js";
 import type { CatalogItem, Product, Project } from "../src/types/catalog";
 import { createElement } from "react";
@@ -128,34 +127,26 @@ test("all sorting modes are deterministic and do not mutate source", () => {
   assert.equal(sample[0].id, "test-a");
   assert.equal(catalogCategories([item, item]).length, 1);
 });
-test("current fallback contains unique source-supported categories and valid solution links", () => {
-  assert.equal(
-    equipmentCatalog.length,
-    publishedSolutions.reduce((sum, s) => sum + s.equipment.length, 0),
-  );
-  if (!publishedProducts.length)
-    assert.deepEqual(catalogItems, equipmentCatalog);
-  assert.equal(
-    catalogCategories(equipmentCatalog).length,
-    publishedSolutions.length,
-  );
-  assert.equal(
-    new Set(catalogItems.map((i) => i.id)).size,
-    catalogItems.length,
-  );
-  for (const entry of equipmentCatalog) {
-    assert.equal(entry.kind, "equipment-category");
-    assert(
-      publishedSolutions.some((s) => entry.href === `/solutions/${s.slug}/`),
-    );
-    assert.equal(entry.quoteHref, undefined);
+test("profile-based product catalog has unique items across nonempty categories and valid detail routes", () => {
+  assert(catalogItems.length > 0);
+  assert.equal(new Set(catalogItems.map((i) => i.id)).size, catalogItems.length);
+  assert.equal(publishedProducts.length, 113);
+  assert.equal(productCountByCategory.length, 13);
+  assert(productCountByCategory.every((entry) => entry.count > 0));
+  assert.equal(catalogCategories(catalogItems).length, 13);
+  for (const entry of catalogItems) {
+    assert.equal(entry.kind, "product");
+    assert(entry.href.startsWith("/products/"));
+    assert(entry.attributionLabel);
+    assert(publishedProducts.some((product) => product.slug === entry.href.split("/").filter(Boolean).at(-1)));
   }
 });
+
 const product: Product = {
   id: "test-product",
   slug: "test-product",
   name: "Test-only product",
-  categoryId: "cctv-surveillance",
+  categoryId: "queue-management",
   description: "Test-only description",
   overview: "Test-only overview",
   keywords: [],
@@ -178,6 +169,9 @@ const product: Product = {
   relatedProductIds: [],
   published: true,
   verificationStatus: "approved",
+  divisionAttribution: "unconfirmed",
+  divisionLabel: "Test only",
+  sourcePages: [],
 };
 test("publication requires approval and valid category; unverified media/specs/features are removed", () => {
   assert(
@@ -211,16 +205,20 @@ test("related products exclude self and connect same-category or explicit record
       ...product,
       id: "test-pos",
       slug: "test-pos",
-      categoryId: "point-of-sale",
+      categoryId: "unknown-category",
     },
   ]);
   assert.deepEqual(
     relatedProducts(product, others).map((p) => p.id),
     ["test-other"],
   );
+  const withExplicitRelated = selectPublishedProducts([
+    product,
+    { ...product, id: "test-other", slug: "test-other" },
+    { ...product, id: "test-pos", slug: "test-pos" },
+  ]);
   assert.equal(
-    relatedProducts({ ...product, relatedProductIds: ["test-pos"] }, others)
-      .length,
+    relatedProducts({ ...product, relatedProductIds: ["test-pos"] }, withExplicitRelated).length,
     2,
   );
 });
@@ -229,7 +227,7 @@ const project: Project = {
   slug: "test-project",
   title: "Test-only project",
   industry: "Test industry",
-  solutionIds: ["cctv-surveillance"],
+  solutionIds: ["queue-management"],
   description: "Test",
   overview: "Test",
   requirement: "Test",
@@ -264,11 +262,11 @@ test("projects need approved photographs; combined portfolio filters work", () =
   assert.equal(selected.length, 1);
   assert.equal(selected[0].outcomes.length, 0);
   assert.equal(
-    filterProjects(selected, "cctv-surveillance", "Test industry").length,
+    filterProjects(selected, "queue-management", "Test industry").length,
     1,
   );
   assert.equal(
-    filterProjects(selected, "point-of-sale", "Test industry").length,
+    filterProjects(selected, "cctv-surveillance", "Test industry").length,
     0,
   );
   assert.equal(filterProjects(selected, "all", "other").length, 0);
@@ -285,13 +283,8 @@ test("inquiry adapter encodes actual product name and stays absent without verif
 test("current data has no fabricated records or broken references", () => {
   for (const records of [products, projects, clients, partners])
     assert.equal(new Set(records.map((r) => r.id)).size, records.length);
-  for (const records of [
-    publishedProducts,
-    publishedProjects,
-    publishedClients,
-    publishedPartners,
-  ])
-    assert(records.every(isApproved));
+  assert(publishedProducts.every((p) => p.verificationStatus === "profile-reference" || isApproved(p)));
+  for (const records of [publishedProjects, publishedClients, publishedPartners]) assert(records.every(isApproved));
   assert.equal(officialWebsite("javascript:alert(1)"), undefined);
   assert.equal(officialWebsite("https://example.com"), "https://example.com/");
   for (const p of products) {
@@ -372,5 +365,5 @@ test("project detail template keeps requirements, scope, and related solution li
   ])
     assert(html.includes(section));
   assert(!html.includes("Unverified outcome"));
-  assert(/href="\/solutions\/cctv-surveillance\/?"/.test(html));
+  assert(/href="\/solutions\/queue-management\/?"/.test(html));
 });

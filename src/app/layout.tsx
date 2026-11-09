@@ -17,12 +17,12 @@ const inter = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: "ESSCOM | Technology, Security & Automation",
+    default: "ESSCOM | Company Information Preview",
     template: "%s | ESSCOM",
   },
   description: siteConfig.description,
   robots: { index: deployment.indexable, follow: deployment.indexable },
-  icons: { icon: "/icons/esscom.svg" },
+  icons: { icon: "/icons/queue-favicon.svg" },
 };
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (

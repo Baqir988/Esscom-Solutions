@@ -1,5 +1,5 @@
 import type { Product } from "@/types/catalog";
-import { getSolution, solutionHref } from "@/data/solutions";
+import { getProductCategory } from "@/data/product-categories";
 import { relatedProducts, toProductCard, productHref } from "@/data/products";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionWrapper } from "@/components/ui/section-wrapper";
@@ -9,7 +9,7 @@ import { ProductGrid } from "./product-card";
 import { QuoteCTA } from "./quote-cta";
 
 export function ProductDetail({ product }: { product: Product }) {
-  const category = getSolution(product.categoryId)!;
+  const category = getProductCategory(product.categoryId)!;
   const related = relatedProducts(product);
   const features = product.features.filter((item) => item.verified);
   const specs = product.specifications.filter((item) => item.verified);
@@ -26,6 +26,7 @@ export function ProductDetail({ product }: { product: Product }) {
         ]}
       />
       <SectionWrapper className="section-white">
+        <p className="context-note"><strong>{product.divisionLabel} · profile reference</strong><br />{category.catalogNote} Source pages: {product.sourcePages.join(", ")}.</p>
         <div className="split-layout product-overview">
           <MediaGallery
             key={product.id}
@@ -61,7 +62,7 @@ export function ProductDetail({ product }: { product: Product }) {
         <SectionWrapper>
           <SectionHeading
             eyebrow="TECHNICAL DETAILS"
-            title="Verified specifications."
+            title="Specifications stated in the profile."
           />
           <table className="specification-table">
             <caption>Technical specifications for {product.name}</caption>
@@ -102,10 +103,7 @@ export function ProductDetail({ product }: { product: Product }) {
         </SectionWrapper>
       )}
       <SectionWrapper className="section-white">
-        <QuoteCTA
-          name={product.name}
-          solutionHref={solutionHref(category.slug)}
-        />
+        <QuoteCTA name={product.name} catalogHref="/products/" />
       </SectionWrapper>
     </>
   );

@@ -2,7 +2,7 @@
 
 A corporate technology website built through Phases 1-5, with Phase 6 media preparation, using Next.js App Router, React, strict TypeScript, Tailwind CSS, Lucide icons, and locally bundled Inter. The application is frontend-only and exports static files. No database, authentication, API backend, analytics, or non-operational contact form is included.
 
-The current release is a **staging/review website**. Contact infrastructure is implemented, but approved ESSCOM contact channels are still missing. Product models, installations, client/partner relationships, and legal copy remain approval-dependent. Phase 6 extracted every embedded profile image and prepared private WebP derivatives. Sixteen category references are visible on the home, solutions, and equipment catalog pages as historical profile imagery, with captions clarifying that ESSCOM availability and installation attribution are unverified. Confirm usage rights before production release. Project, client, partner, brand-logo, factory, and other-division images remain unpublished.
+The current release is a **staging/review website**. Contact infrastructure is implemented, but approved ESSCOM contact channels are still missing. Product models, installations, client/partner relationships, and legal copy remain approval-dependent. Phase 6 extracted every embedded profile image and prepared private WebP derivatives. No profile-derived image is public because reproduction rights and division attribution remain unconfirmed. Only queue management is currently published as a solution category based on ESSCOM-specific references; other catalog categories await confirmation.
 
 ## Setup and local preview
 
@@ -50,13 +50,13 @@ Lighthouse uses one cold navigation per representative route, default simulated 
 
 ## Structure
 
-- src/app/: homepage, About, Solutions and five detail pages, Products, Projects, Clients & Partners, Contact, staging Privacy, custom 404, robots and sitemap.
+- src/app/: homepage, About, Solutions and queue-management detail page, Products, Projects, Clients & Partners, Contact, staging Privacy, custom 404, robots and sitemap.
 - src/components/: shared layout/UI, contact, catalog, portfolio, and content sections.
 - src/data/: centralized solutions, products, projects, clients, partners, and brand/contact configuration.
 - src/types/: typed records, media, publication gates, and contact data.
 - src/lib/: search/filter logic, contact URLs, publication selectors, deployment policy, metadata, route inventory.
 - src/hooks/: hydration readiness and mobile dialog behavior.
-- public/images/, public/logos/, public/icons/: approved local assets, including 16 category-reference profile images with 42 local responsive WebP variants.
+- public/images/, public/logos/, public/icons/: approved local assets only; source-profile images and logos remain private.
 - scripts/: static compatibility, export/link checks, local server, performance measurement.
 - tests/: unit/rendering tests plus tests/e2e/ browser coverage.
 
@@ -66,13 +66,13 @@ The internal CONTENT_VERIFICATION.md is maintained locally and excluded from Git
 
 ### Solutions
 
-Edit src/data/solutions.ts. The same records power navigation, directory cards, homepage, related links, and static detail routes. Use unique slugs and valid relatedSlugs. Only the five approved website categories are published; IT & Communication requires approval. Copy describes proposed applications, not verified clients, specifications, or guarantees.
+Edit src/data/solutions.ts. The same records power navigation, directory cards, homepage, related links, and static detail routes. Use unique slugs and valid relatedSlugs. Only queue management is currently published based on the profile’s ESS-Queue Management System and Powered by ESSCOM Solutions references. CCTV, biometric/access, POS, digital signage, IT/communications, and broader capability claims require division/scope confirmation before publication.
 
 ### Products
 
 Add typed Product records to src/data/products.ts. Every model needs a unique id/slug, a published solution categoryId, description/overview, keywords, approved images, applications, and valid relatedProductIds. Publish only with verificationStatus: "approved" and published: true. Features/specifications have separate verified flags. Never infer availability, pricing, stock, warranties, or manufacturer relationships.
 
-With no approved models, the catalog shows 15 clearly labeled equipment categories and links to solutions. Product detail templates exist, but no fictional detail routes are generated. next.config.ts enables the page.product.tsx extension only when published records exist; keep this convention because Next static export rejects discovered dynamic routes with no generated parameters.
+With no approved product models, the catalog shows three queue-system equipment categories and links to the queue solution. Product detail templates exist, but no fictional detail routes are generated. next.config.ts enables the page.product.tsx extension only when published records exist; keep this convention because Next static export rejects discovered dynamic routes with no generated parameters.
 
 ### Projects
 
@@ -90,9 +90,9 @@ src/lib/contact.ts normalizes telephone/WhatsApp numbers without guessing a coun
 
 ### Images and fonts
 
-Current media includes original SVG/HTML illustrations and 16 optimized historical category-reference images (42 responsive WebP variants, 775,402 bytes in total), plus a 219-byte SVG favicon. Inter is one local variable WOFF2 (48,256 bytes) with swap display. Avoid adding remote font requests.
+Public visuals currently use code-drawn conceptual illustrations and a generic queue glyph favicon (not an ESSCOM logo). No DOCX image or logo is public. Private media contains 616 unique extracted images and 502 WebP derivatives across responsive sizes. Inter is one local variable WOFF2 (48,256 bytes) with swap display. Avoid adding remote font requests.
 
-Future approved assets should be resized and compressed to appropriate WebP/AVIF dimensions before entering public/. Store src, alt, width, height, approved, and kind in MediaAsset. Keep aspect ratios reserved. ApprovedImage provides lazy loading and error fallback; MediaGallery supports approved thumbnails. The static export does not use a Next image optimization server. Do not bulk-extract the company profile in Phase 5.
+Future approved assets should be resized and compressed to appropriate WebP/AVIF dimensions before entering public/. Store src, alt, width, height, approved, and kind in MediaAsset. Keep aspect ratios reserved. ApprovedImage provides lazy loading and error fallback; MediaGallery supports approved thumbnails. The static export does not use a Next image optimization server. Raw source images remain outside public/. Do not publish a profile image without documented media rights and division attribution.
 
 ## SEO and indexing
 
@@ -149,18 +149,17 @@ Before indexing: approve the legal/privacy text, company copy, contact channels,
 
 A future custom domain must first be purchased/owned and authorized separately. Add it in Vercel Project Settings > Domains, apply Vercel's displayed DNS records, verify HTTPS and redirects, update NEXT_PUBLIC_SITE_URL, and redeploy. No domain purchase or billing change is part of this phase.
 
-## Phase 6 media workflow
+## Profile media workflow
 
-See PHASE6_REPORT.md for counts, measurements and remaining approvals. The complete MEDIA_INVENTORY.md, src/data/media-manifest.json, scripts/profile-review.mjs annotations and private/company-profile/ archive are local internal artifacts, excluded from Git and static output. Keep a separate authorized backup of them; a clean public checkout intentionally does not contain the original profile or review material.
+See ESSCOM_FINAL_CONTENT_AND_MEDIA_AUDIT.md for current findings and MEDIA_INVENTORY.md for the full count and per-asset review. PHASE6_REPORT.md records the earlier image-processing pass, which was superseded by the current rights and attribution audit. MEDIA_INVENTORY.md, CONTENT_VERIFICATION.md, HIGH_RESOLUTION_ASSETS_REQUIRED.md, PORTFOLIO_AND_PARTNER_APPROVAL.md, ESSCOM_FINAL_CONTENT_AND_MEDIA_AUDIT.md, src/data/media-manifest.json, scripts/profile-review.mjs annotations, and private/company-profile/ archive are local internal artifacts; review current .gitignore before publishing the repository. Keep a separate authorized backup of them; a clean public checkout intentionally does not contain the original profile or review material.
 
-The DOCX was found in the user-specified Downloads location, not reference-documents/. The extraction script accepts any explicitly provided source path and never edits that document:
+The DOCX is available in reference-documents/ for local review. The extraction script accepts an explicit source path and never edits that document. For a fresh source file, run:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/extract-profile.ps1 -Source 'C:\Users\Lenovo\Downloads\PROFILE TECHNOWORD (NEW)_compressed (2) (1).docx'
 npm run media:inspect
 # Review all contact sheets; maintain the private scripts/profile-review.mjs annotations.
 npm run media:prepare
-npm run media:publish
 npm run check:media
 npm run check:media:browser
 ```
@@ -172,10 +171,17 @@ The local review gallery is private/company-profile/review.html. It links unmodi
 ### Publish a specifically approved image
 
 1. Record the approved asset ID, image rights, ESSCOM attribution, permitted placement and display limitations in the internal approval register. Product-category imagery does not establish model availability/specifications. Projects, people, clients, partners and facilities need their own attribution/consent decisions.
-2. Choose the best reviewed original/derivative, keeping native size and full product framing. Request larger source files where needed; do not upscale. The current `npm run media:publish` publishes the 16 specifically selected, captioned category references to `public/images/company-profile/`. Review its source list, placement captions, and rights before adapting it for any additional selection.
+2. Choose the best reviewed original/derivative, keeping native size and full product framing. Request larger source files where needed; do not upscale. The old publish helper is intentionally disabled; do not enable it or copy media into public until individual rights and attribution approvals are recorded.
 3. Keep each public `MediaAsset` in `src/data/media.ts` with descriptive alt, verified native width/height, `approved: true`, `kind`, `sourceAssetId`, `sourceReference`, a clearly qualified caption, and local responsive variants. The application never calls the Next runtime image API.
 4. Map the asset ID in `mediaPlacements.solutions` or `mediaPlacements.equipment`. This updates shared solution cards/detail visuals and equipment cards on the homepage/catalog. Product/project image arrays and approved relationship logos can reuse `getApprovedMedia(id)`; keep their separate publication gates. Do not add a project/client record just to display a photograph.
 5. Keep any hero below its source-size limit. The current low-resolution logo is not a replacement for approved vector artwork. About/Home general visuals remain unchanged until suitable attributed assets exist.
 6. Rebuild and rerun media, export and browser checks, then measure performance before a protected Vercel preview. Update the internal manifest/report to reflect actual approvals and published variants. Actual product/project galleries still need public-route testing once their records are approved.
 
 Responsive WebP selection is browser-native through picture/source; dimensions reserve space, low-priority images are lazy, and missing/unapproved media uses existing fallbacks. No new runtime image/gallery dependency was introduced. Private image checks require the local review archive; normal build, lint, unit tests and website browser tests work without it.
+
+
+## Profile-based catalog update
+
+The product catalog is now centralized in `src/data/products.ts`, with category attribution/source metadata in `src/data/product-categories.ts`. It contains 113 historical product, equipment-family, and service references across 13 searchable categories, with static detail pages. The catalog is not a stock/availability statement: cards and detail pages disclose the profile source and division/ownership status. Queue Management is the only category explicitly identified with ESSCom Solutions; TECHNOVATION, Techno Solar, Wallers, and factory-section references are labeled separately. See `PRODUCT_CATALOG_AUDIT.md` and `CONTENT_VERIFICATION.md`.
+
+Selected embedded profile photographs are used in product categories as representative imagery only. Optimized public variants are under `public/images/profile-catalog/`; source originals remain in the private archive. Project, client, partner and logo images are not included. Contact channels remain unconfigured, so quote actions are not shown.

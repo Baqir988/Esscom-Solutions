@@ -4,6 +4,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
+throw new Error("Profile image publishing is disabled until each asset has documented usage permission and confirmed ESSCOM division attribution. See CONTENT_VERIFICATION.md.");
+
 const items = [
   {key:'cctv-camera',sourceId:'profile-0365',category:'cctv',file:'camera',alt:'Bullet CCTV camera shown in the supplied historical company profile',caption:'Historical category reference from the supplied profile. Current ESSCOM models and availability require confirmation.',kind:'photograph'},
   {key:'cctv-recorder',sourceId:'profile-0340',category:'cctv',file:'video-recorder',alt:'Video recording unit pictured in the supplied company profile',caption:'Historical equipment example. Compatibility, current supply and specifications require confirmation.',kind:'photograph'},

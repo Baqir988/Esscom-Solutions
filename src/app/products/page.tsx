@@ -7,7 +7,7 @@ import { EquipmentIllustration } from "@/components/ui/equipment-illustration";
 import { PrimaryButton } from "@/components/ui/buttons";
 import { ContactCTA } from "@/components/ui/contact-cta";
 import { ProductCatalog } from "@/components/catalog/product-catalog";
-export const metadata = pageMetadata("Products & Equipment", "Explore ESSCOM equipment categories for surveillance, access control, queues, point of sale, and digital signage. Search and filter by your requirements.", "/products/");
+export const metadata = pageMetadata("Products & Equipment", "Browse products and equipment categories found in the supplied Techno World International profile. Division ownership and current availability are labeled for each reference.", "/products/");
 export default function ProductsPage() {
   const hasProducts = publishedProducts.length > 0;
   return (
@@ -15,7 +15,7 @@ export default function ProductsPage() {
       <PageHero
         eyebrow="PRODUCTS & EQUIPMENT"
         title="Explore our technology & equipment."
-        description="From the entrance to the service counter, explore the equipment that connects your spaces, people, and operations."
+        description="Browse equipment, systems, and services documented across the company profile, with division attribution shown wherever the source identifies it."
         breadcrumbs={[
           { label: "Home", href: "/" },
           { label: "Products", href: "/products/" },
@@ -42,14 +42,14 @@ export default function ProductsPage() {
             title={
               hasProducts
                 ? "Find equipment for your requirements."
-                : "Start with the right equipment category."
+                : "Browse the profile product references."
             }
-            description="Search by name or keyword, narrow the category, and compare the possibilities."
+            description="Search across product names, models and keywords, or filter the profile references by category."
           />
           <p className="context-note">
             {hasProducts
-              ? "Published product information. Pricing and suitability are confirmed through an enquiry."
-              : "Category-level information only. Specific models, specifications, and availability await approval."}
+              ? "Profile-sourced category records. Current product ownership, models, availability, and pricing are not confirmed by this historical document."
+              : "This historical profile catalog is not a confirmation of current ESSCOM stock or services. Every record identifies its source and division attribution status."}
           </p>
         </div>
         <ProductCatalog items={catalogItems} />

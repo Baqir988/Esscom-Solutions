@@ -1,4 +1,4 @@
-import { readFile, stat } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import { gzipSync } from "node:zlib";
 import assert from "node:assert/strict";
 
@@ -18,5 +18,5 @@ assert(totals.javascriptGzip < 200 * 1024, "Homepage modern JS exceeds 200 KiB g
 assert(totals.cssGzip < 20 * 1024, "Styles exceed 20 KiB gzip budget");
 assert(totals.fontBytes < 64 * 1024, "Initial font exceeds 64 KiB budget");
 assert(totals.htmlGzip < 60 * 1024, "Homepage document exceeds 60 KiB gzip budget");
-assert((await stat("public/icons/esscom.svg")).size < 4096);
+assert(!html.includes("/icons/esscom.svg"), "Unapproved placeholder logo must not be linked as a favicon");
 console.log("PASS: initial modern-browser asset budgets", JSON.stringify(totals));

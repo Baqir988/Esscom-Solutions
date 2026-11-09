@@ -20,9 +20,6 @@ export function Footer() {
           <div className="footer-brand">
             <Wordmark />
             <p>{siteConfig.description}</p>
-            <span className="footer-note">
-              Security. Connection. Possibility.
-            </span>
           </div>
           <div>
             <h2>Explore</h2>

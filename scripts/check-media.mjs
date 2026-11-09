@@ -4,9 +4,11 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import sharp from 'sharp';
 import {approvedMedia,mediaPlacements} from '../src/data/media.ts';
+import {publishedProducts} from '../src/data/products.ts';
 const manifest=JSON.parse(await fs.readFile('src/data/media-manifest.json','utf8'));
 const ids=new Set();const canonical=new Map();const checked=new Set();
 const approvedSourceIds=new Set(Object.values(approvedMedia).map(a=>a.sourceAssetId));
+const catalogPhotoIds=new Set(publishedProducts.flatMap(p=>p.images.map(i=>i.sourceAssetId)));
 for(const a of manifest.assets){
   assert(!ids.has(a.id),`Duplicate ID ${a.id}`);ids.add(a.id);
   const raw=await fs.readFile(a.originalPath);
@@ -14,12 +16,12 @@ for(const a of manifest.assets){
   assert.equal(createHash('sha256').update(raw).digest('hex'),a.sha256);
   assert(a.occurrences.length,`Unmapped ${a.id}`);
   assert(a.description&&a.category&&a.publicationStatus&&a.intendedPlacement);
-  if(approvedSourceIds.has(a.id)){assert.equal(a.approved,true,`Published reference missing explicit status ${a.id}`);assert.equal(a.publicationStatus,'approved-historical-category-reference');assert(a.publicationReason.includes('historical category reference'));}
-  else assert.equal(a.approved,false,'Unselected source must remain unpublished');
+  if(catalogPhotoIds.has(a.id)){assert.equal(a.approved,true,'User-requested product category photo must be approved for the stated use');assert.equal(a.published,true);assert(a.publicOptimizedOutputs.length>0);assert(a.publicationReason.includes('representative historical category imagery'));}
+  else {assert.equal(a.approved,false,'Other profile images remain unpublished pending rights and attribution');assert.equal(a.published,false);assert.equal(a.publicOptimizedOutputs.length,0,'No unapproved profile image may retain a public output path');}
   if(a.duplicateOf){assert.equal(canonical.get(a.duplicateOf),a.sha256);}else canonical.set(a.id,a.sha256);
   for(const output of a.optimized){
     if(checked.has(output.path))continue;checked.add(output.path);
-    assert(output.path.startsWith('private/company-profile/optimized/'),'Unapproved derivative in public tree');
+    assert(output.path.startsWith('private/company-profile/optimized/'),'Source archive derivative path changed');
     const stat=await fs.stat(output.path);assert.equal(stat.size,output.bytes);
     const meta=await sharp(output.path).metadata();
     assert.equal(meta.format,'webp');assert.equal(meta.width,output.width);assert.equal(meta.height,output.height);
@@ -29,10 +31,17 @@ for(const a of manifest.assets){
     assert(!meta.exif&&!meta.xmp&&!meta.iptc,`Source metadata retained ${a.id}`);
   }
 }
+const catalogImagePaths=new Set();
+for(const product of publishedProducts) for(const image of product.images){
+  assert(image.approved&&image.sourceAssetId&&image.alt.includes("representative category image"), 'Catalog source photograph must be identified as representative');
+  assert(image.src.startsWith('/images/profile-catalog/'));
+  const source=manifest.assets.find(a=>a.id===image.sourceAssetId);assert(source, 'Catalog photo must map to a DOCX media record');
+  for(const variant of image.sources??[]){assert(variant.src.startsWith('/images/profile-catalog/'));const file=path.join('public',variant.src);await fs.access(file);const meta=await sharp(file).metadata();assert.equal(meta.format,'webp');assert.equal(meta.width,variant.width);assert.equal(meta.height,variant.height);assert(meta.width<=source.width&&meta.height<=source.height);catalogImagePaths.add(variant.src);}
+}
 for(const [id,a] of Object.entries(approvedMedia)){
   assert(a.approved&&a.alt.trim()&&a.width>0&&a.height>0,`Invalid public asset ${id}`);
   for(const src of [a.src,...(a.sources??[]).map(s=>s.src)]){
-    assert(/^\/images\/company-profile\/[a-zA-Z0-9/_-]+\.webp$/.test(src));
+    assert(/^\/images\/[a-zA-Z0-9/_-]+\.webp$/.test(src));
     await fs.access(path.join('public',src));
     const meta=await sharp(path.join('public',src)).metadata();assert.equal(meta.format,'webp');
   }
@@ -51,5 +60,7 @@ for(const file of outputFiles){
 }
 assert.equal(manifest.statistics.extracted,manifest.assets.length);
 assert.equal(manifest.statistics.unique,canonical.size);
-assert.equal(approvedSourceIds.size,16);
-console.log(`PASS: ${ids.size} originals hash-verified, ${canonical.size} unique, ${checked.size} private derivatives checked; ${approvedSourceIds.size} explicitly approved historical category references and all public WebP files verified; no private-media export leaks.`);
+assert.equal(approvedSourceIds.size,0);
+assert.equal(catalogPhotoIds.size,45);
+assert(catalogImagePaths.size>0);
+console.log(`PASS: ${ids.size} originals hash-verified, ${canonical.size} unique, ${checked.size} private derivatives checked; ${catalogPhotoIds.size} profile photographs published as category references (${catalogImagePaths.size} WebP variants validated); remaining profile assets are unpublished; no private archive export leaks.`);

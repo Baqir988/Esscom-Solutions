@@ -12,14 +12,14 @@ import { SolutionGrid } from "@/components/solutions/solution-card";
 import { IndustrySection } from "@/components/sections/industry-section";
 import { ApproachSection } from "@/components/sections/approach-section";
 
-export const metadata = pageMetadata("About ESSCOM", "Learn about ESSCOM’s focus on security, automation, and communication technology, its proposed direction, and a practical approach to organizational needs.", "/about/");
+export const metadata = pageMetadata("About ESSCOM", "Read the supplied profile context for ESSCom Solutions and its specifically identified queue-management system.", "/about/");
 export default function AboutPage() {
   return (
     <>
       <PageHero
         eyebrow="ABOUT ESSCOM"
-        title="Technology with a practical purpose."
-        description="A focus on the systems that connect people, spaces, and everyday operations."
+        title="About ESSCom Solutions."
+        description="Company information is being verified against the supplied multi-division profile."
         breadcrumbs={[
           { label: "Home", href: "/" },
           { label: "About Us", href: "/about/" },
@@ -34,8 +34,8 @@ export default function AboutPage() {
       <SectionWrapper className="section-white">
         <div className="split-layout overview-layout">
           <SectionHeading
-            eyebrow="OUR FOCUS"
-            title="Relevant technology for real organizational needs."
+            eyebrow="PROFILE CONTEXT"
+            title="A distinct division in a wider company profile."
           />
           <div className="editorial-copy">
             {companyIntroduction.map((paragraph) => (
@@ -48,22 +48,18 @@ export default function AboutPage() {
         <div className="background-panel">
           <div>
             <p className="eyebrow">COMPANY BACKGROUND</p>
-            <h2>A focused identity within a broader reference.</h2>
+            <h2>ESSCom Solutions and the wider profile.</h2>
           </div>
           <div className="editorial-copy">
             <p>
-              The supplied company profile presents ESSCom Solutions among the
-              divisions of Techno World International and also references Salman
-              Traders and other business identities. Its broader range includes
-              security, attendance, queue systems, point-of-sale equipment, and
-              display technologies.
+              The profile presents ESSCom Solutions alongside ESSCom Engineering,
+              Techno Solar, and Technovation. It also contains material associated
+              with Techno World International and Salman Traders.
             </p>
             <p>
-              This website develops ESSCOM’s positioning around those five
-              technology areas. The wider profile provides context for the
-              equipment categories; its company history, client lists, project
-              records, and brand relationships are not presented here as
-              ESSCOM-specific achievements.
+              This wider document is historical reference material. Its products,
+              projects, client list, partners, contacts, and company history are
+              not treated as ESSCOM-specific or current without confirmation.
             </p>
           </div>
         </div>
@@ -94,9 +90,9 @@ export default function AboutPage() {
       <SectionWrapper>
         <div className="section-top">
           <SectionHeading
-            eyebrow="CORE TECHNOLOGY CAPABILITIES"
-            title="Five areas. A connected perspective."
-            description="Explore the categories at the heart of ESSCOM’s proposed business positioning."
+            eyebrow="IDENTIFIED SOLUTION"
+            title="The ESS-Queue Management System."
+            description="The supplied profile identifies this system by name and includes a screen marked Powered by ESSCOM Solutions."
           />
         </div>
         <SolutionGrid solutions={publishedSolutions} />

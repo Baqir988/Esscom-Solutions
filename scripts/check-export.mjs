@@ -2,9 +2,11 @@ import { readFile, readdir, stat } from "node:fs/promises";
 import { resolve, dirname, sep } from "node:path";
 import assert from "node:assert/strict";
 import { publishedProducts } from "../src/data/products.ts";
+import { productCategories } from "../src/data/product-categories.ts";
 import { publishedProjects } from "../src/data/projects.ts";
 import { publishedClients } from "../src/data/clients.ts";
 import { publishedPartners } from "../src/data/partners.ts";
+import { publishedSolutions, getRelatedSolutions, getSolution } from "../src/data/solutions.ts";
 import { contactActions } from "../src/lib/contact.ts";
 import { deployment } from "../src/lib/deployment.ts";
 import { publicContentPaths } from "../src/lib/routes.ts";
@@ -28,11 +30,7 @@ const contentRoutes = [
   "",
   "about",
   "solutions",
-  "solutions/cctv-surveillance",
-  "solutions/biometric-access-control",
-  "solutions/queue-management",
-  "solutions/point-of-sale",
-  "solutions/digital-signage",
+  ...publishedSolutions.map((item) => `solutions/${item.slug}`),
   "products",
   "projects",
   "clients-partners",
@@ -78,10 +76,9 @@ for (const route of contentRoutes) {
       html.includes('aria-label="Breadcrumb"'),
       `Missing breadcrumb: ${route}`,
     );
-    assert(
-      html.includes("RELATED SOLUTIONS"),
-      `Missing related solutions: ${route}`,
-    );
+    const slug = route.split("/").at(-1);
+    if (slug && getSolution(slug) && getRelatedSolutions(getSolution(slug)).length)
+      assert(html.includes("RELATED SOLUTIONS"), `Missing related solutions: ${route}`);
   }
 }
 for (const page of pages) {
@@ -113,11 +110,9 @@ for (const page of pages) {
     links.add(href);
   }
 }
-assert(pages.length >= 14, "Missing expected static pages");
-assert(
-  !files.some((file) => file.includes("it-communication")),
-  "Unverified category must not be exported",
-);
+assert(pages.length >= contentRoutes.length, "Missing expected static pages");
+assert(productCategories.every((category) => publishedProducts.some((product) => product.categoryId === category.id)), "Every documented catalog category must contain at least one record");
+for (const product of publishedProducts) assert(files.some((file) => file.includes("products" + sep + product.slug + sep + "index.html")), `Missing product route: ${product.slug}`);
 const catalogHtml = await readFile(
   resolve(root, "products/index.html"),
   "utf8",
@@ -132,11 +127,7 @@ for (const control of [
     catalogHtml.includes(`id="${control}"`),
     `Missing catalog control ${control}`,
   );
-if (!publishedProducts.length)
-  assert(
-    catalogHtml.includes("Equipment category"),
-    "Equipment-only fallback label missing",
-  );
+assert(catalogHtml.includes("division attribution") || catalogHtml.includes("Division attribution"), "Catalog attribution note missing");
 if (!contactActions().length) {
   for (const page of pages) {
     const html = await readFile(page, "utf8");
