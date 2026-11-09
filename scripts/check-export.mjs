@@ -36,6 +36,7 @@ const contentRoutes = [
   "clients-partners",
   "contact",
   ...publishedProducts.map((item) => `products/${item.slug}`),
+  ...productCategories.map((category) => `products/category/${category.id}`),
   ...publishedProjects.map((item) => `projects/${item.slug}`),
 ];
 const titles = new Set();

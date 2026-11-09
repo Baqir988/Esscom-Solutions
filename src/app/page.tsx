@@ -8,8 +8,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { SystemIllustration } from "@/components/ui/system-illustration";
 import { ConnectedSystems } from "@/components/ui/connected-systems";
 import { ContactCTA } from "@/components/ui/contact-cta";
-import { ProductGrid } from "@/components/catalog/product-card";
-import { featuredCatalogItems } from "@/data/products";
+import { ProductCategoryDirectory } from "@/components/catalog/category-directory";
 import { IndustrySection } from "@/components/sections/industry-section";
 import { EquipmentSection } from "@/components/sections/equipment-section";
 import { ProjectPreview } from "@/components/sections/project-preview";
@@ -29,18 +28,16 @@ export default function Home() {
                 <span /> TECHNOLOGY WITH PURPOSE
               </p>
               <h1>
-                Smarter Systems.
+                Technology for
                 <br />
-                Safer Spaces.
-                <br />
-                <span>Better Operations.</span>
+                <span>better operations.</span>
               </h1>
               <p className="hero-description">
-                The supplied profile identifies an ESS-Queue Management System and shows a display marked Powered by ESSCOM Solutions.
+                The company profile documents equipment across security, workplace, and customer-service categories. It specifically identifies an ESS-Queue Management System with ESSCom Solutions.
               </p>
               <div className="hero-actions">
-                <PrimaryButton href="/solutions/">
-                  Explore Solutions
+                <PrimaryButton href="/products/">
+                  Explore Equipment
                 </PrimaryButton>
                 <SecondaryButton href="/about/">
                   About ESSCOM <ArrowRight size={18} aria-hidden="true" />
@@ -48,16 +45,14 @@ export default function Home() {
               </div>
               <div className="hero-footnote">
                 <span className="small-rule" />
-                Queue tickets <span aria-hidden="true">/</span>{" "}
-                Counter displays
+                Queue management <span aria-hidden="true">/</span> Attendance <span aria-hidden="true">/</span> Security <span aria-hidden="true">/</span> Retail
               </div>
             </div>
             <SystemIllustration />
           </div>
           <div className="hero-bottom">
             <span>
-              ESSCOM <span className="hero-bottom-separator">/</span> QUEUE MANAGEMENT
-              PROFILE REFERENCE
+              PROFILE-REFERENCED TECHNOLOGY PORTFOLIO <span className="hero-bottom-separator">/</span> DIVISION ATTRIBUTION SHOWN THROUGHOUT
             </span>
             <Link href="#core-solutions">
               Discover the possibilities{" "}
@@ -72,16 +67,17 @@ export default function Home() {
       >
         <div className="section-top">
           <SectionHeading
-            eyebrow="PROFILE-SOURCED CATEGORIES"
-            title="Technology and equipment referenced in the profile."
-            description="The wider company document lists equipment across security, attendance, retail, display, and office categories. Each catalog record distinguishes ESSCom-specific references, other divisions, and ownership that remains unconfirmed."
+            eyebrow="EXPLORE THE CATALOG"
+            title="A portfolio spanning workplace and service technology."
+            description="Browse categories documented across the company profile. Each category keeps its source and division context visible, so historic group references are not confused with confirmed ESSCOM offerings."
             id="core-solutions-heading"
           />
           <Link className="text-link" href="/products/">
             Explore the product catalog <ArrowUpRight size={18} aria-hidden="true" />
           </Link>
         </div>
-        <ProductGrid items={featuredCatalogItems} />
+        <ProductCategoryDirectory limit={6} />
+        <div className="catalog-browse-footer"><span>Explore all documented equipment categories</span><Link className="button button-secondary" href="/products/">Open complete catalog <ArrowRight size={17}/></Link></div>
       </SectionWrapper>
       <SectionWrapper className="section-white">
         <div className="split-layout about-intro">

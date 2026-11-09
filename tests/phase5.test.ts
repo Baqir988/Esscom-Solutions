@@ -4,6 +4,7 @@ import { deploymentConfig } from "../src/lib/deployment";
 import { publicContentPaths } from "../src/lib/routes";
 import { publishedProducts } from "../src/data/products";
 import { publishedProjects } from "../src/data/projects";
+import { productCategories } from "../src/data/product-categories";
 import { segmentAlias } from "../scripts/fix-static-segments.mjs";
 
 test("Windows RSC compatibility aliases preserve routes and leave normal exports untouched", () => {
@@ -31,6 +32,7 @@ test("production indexing requires explicit intent and a safe canonical origin",
 test("public route inventory excludes legal staging and unapproved detail records", () => {
   assert.equal(new Set(publicContentPaths).size, publicContentPaths.length);
   assert(!publicContentPaths.includes("/privacy/"));
-  assert.equal(publicContentPaths.filter((path) => path.startsWith("/products/") && path !== "/products/").length, publishedProducts.length);
+  assert.equal(publicContentPaths.filter((path) => path.startsWith("/products/") && !path.startsWith("/products/category/") && path !== "/products/").length, publishedProducts.length);
+  assert.equal(publicContentPaths.filter((path) => path.startsWith("/products/category/")).length, productCategories.length);
   assert.equal(publicContentPaths.filter((path) => path.startsWith("/projects/") && path !== "/projects/").length, publishedProjects.length);
 });

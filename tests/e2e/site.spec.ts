@@ -1,9 +1,9 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
-const routes = ["/", "/about/", "/solutions/", "/products/", "/projects/", "/clients-partners/", "/contact/", "/privacy/", "/solutions/queue-management/", "/products/tf-70-biometric-terminal/", "/products/pos-touch-system/", "/products/ess-queue-management-system/", "/products/es-900p-weatherproof-camera/", "/products/outdoor-p4-led-module/", "/products/techno-smart-lockers/", "/products/wallers-cnc-laser-cutting/", "/products/solar-panels/", "/products/multimedia-projector/"];
+const routes = ["/", "/about/", "/solutions/", "/products/", "/products/category/queue-management/", "/projects/", "/clients-partners/", "/contact/", "/privacy/", "/solutions/queue-management/", "/products/tf-70-biometric-terminal/", "/products/pos-touch-system/", "/products/ess-queue-management-system/", "/products/es-900p-weatherproof-camera/", "/products/outdoor-p4-led-module/", "/products/techno-smart-lockers/", "/products/wallers-cnc-laser-cutting/", "/products/solar-panels/", "/products/multimedia-projector/"];
 const widths = [320, 360, 390, 430, 768, 1024, 1280, 1440, 1920];
-const responsiveRoutes = ["/", "/about/", "/solutions/", "/products/", "/products/es-900p-weatherproof-camera/", "/projects/", "/clients-partners/", "/contact/"];
+const responsiveRoutes = ["/", "/about/", "/solutions/", "/products/", "/products/category/queue-management/", "/products/es-900p-weatherproof-camera/", "/projects/", "/clients-partners/", "/contact/"];
 
 for (const width of widths) {
   test(`all routes fit viewport ${width}px and load without runtime errors`, async ({ context }) => {
@@ -87,6 +87,12 @@ test("desktop navigation, dropdown and skip link work with keyboard", async ({ p
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/\/solutions\/[^/]+\/$/);
   await expect(trigger).toHaveAttribute("aria-expanded", "false");
+  const productTrigger = page.getByRole("button", { name: "Product categories" });
+  await productTrigger.focus();
+  await page.keyboard.press("Enter");
+  await expect(productTrigger).toHaveAttribute("aria-expanded", "true");
+  await page.getByRole("link", { name: /POS & Retail/ }).click();
+  await expect(page).toHaveURL(/\/products\/category\/pos-retail\/$/);
   for (const [name, path] of [["Home", "/"], ["About Us", "/about/"], ["Products", "/products/"], ["Projects", "/projects/"], ["Clients & Partners", "/clients-partners/"], ["Contact Us", "/contact/"]]) {
     await page.getByRole("navigation", { name: "Main navigation", exact: true }).getByRole("link", { name, exact: true }).click();
     await expect(page).toHaveURL(new RegExp(path === "/" ? "/$" : `${path}$`));

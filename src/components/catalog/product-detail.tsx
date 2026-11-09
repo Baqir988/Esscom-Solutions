@@ -22,6 +22,7 @@ export function ProductDetail({ product }: { product: Product }) {
         breadcrumbs={[
           { label: "Home", href: "/" },
           { label: "Products", href: "/products/" },
+          { label: category.shortTitle, href: `/products/category/${category.id}/` },
           { label: product.name, href: productHref(product.slug) },
         ]}
       />

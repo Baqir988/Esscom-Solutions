@@ -7,6 +7,8 @@ const pages = [
   "/about/",
   "/solutions/",
   "/products/",
+  "/products/category/biometric-access-control/",
+  "/products/category/queue-management/",
   "/projects/",
   "/clients-partners/",
   "/contact/",

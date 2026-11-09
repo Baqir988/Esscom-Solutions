@@ -10,15 +10,19 @@ import { Container } from "@/components/ui/container";
 import { SolutionIcon } from "@/components/ui/solution-icon";
 import { Wordmark } from "./wordmark";
 import { useHydrated } from "@/hooks/use-hydrated";
+import { productCategories } from "@/data/product-categories";
 
 export function Navbar({ solutions }: { solutions: SolutionNavigation[] }) {
   const hydrated = useHydrated();
   const pathname = usePathname();
   const [dropdownPath, setDropdownPath] = useState<string | null>(null);
+  const [productsOpen, setProductsOpen] = useState(false);
   const dropdown = dropdownPath === pathname;
   const setDropdown = (value: boolean) => setDropdownPath(value ? pathname : null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const dropdownTrigger = useRef<HTMLButtonElement>(null);
+  const productsRef = useRef<HTMLDivElement>(null);
+  const productsTrigger = useRef<HTMLButtonElement>(null);
   const { isOpen, open, close, triggerRef, dialogRef } = useMobileNavigation();
   const active = (href: string) =>
     href === "/"
@@ -43,6 +47,18 @@ export function Navbar({ solutions }: { solutions: SolutionNavigation[] }) {
       document.removeEventListener("keydown", escape);
     };
   }, [dropdown]);
+  useEffect(() => {
+    if (!productsOpen) return;
+    const outside = (event: PointerEvent) => {
+      if (!productsRef.current?.contains(event.target as Node)) setProductsOpen(false);
+    };
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") { setProductsOpen(false); productsTrigger.current?.focus(); }
+    };
+    document.addEventListener("pointerdown", outside);
+    document.addEventListener("keydown", escape);
+    return () => { document.removeEventListener("pointerdown", outside); document.removeEventListener("keydown", escape); };
+  }, [productsOpen]);
   return (
     <header className="site-header">
       <Container className="header-inner">
@@ -99,6 +115,17 @@ export function Navbar({ solutions }: { solutions: SolutionNavigation[] }) {
                       <ArrowUpRight size={14} aria-hidden="true" />
                     </Link>
                   ))}
+                </div>
+              </div>
+            ) : item.href === "/products/" ? (
+              <div className="nav-disclosure products-nav" key={item.href} ref={productsRef} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setProductsOpen(false); }}>
+                <div className="solutions-nav">
+                  <Link href={item.href} className="nav-link" aria-current={active(item.href) ? "page" : undefined} onClick={() => setProductsOpen(false)}>{item.label}</Link>
+                  <button ref={productsTrigger} disabled={!hydrated} type="button" aria-label="Product categories" aria-expanded={productsOpen} aria-controls="products-dropdown" className="dropdown-trigger" onClick={() => setProductsOpen(!productsOpen)}><ChevronDown size={14} aria-hidden="true" /></button>
+                </div>
+                <div id="products-dropdown" className="solutions-dropdown products-dropdown" hidden={!productsOpen}>
+                  <p className="eyebrow">Browse all categories</p>
+                  {productCategories.map((category, index) => <Link href={`/products/category/${category.id}/`} key={category.id} aria-current={active(`/products/category/${category.id}/`) ? "page" : undefined} onClick={() => setProductsOpen(false)}><span className="nav-category-index">{String(index + 1).padStart(2,"0")}</span><span>{category.shortTitle}</span><ArrowUpRight size={14} aria-hidden="true" /></Link>)}
                 </div>
               </div>
             ) : (
@@ -177,6 +204,11 @@ export function Navbar({ solutions }: { solutions: SolutionNavigation[] }) {
                         {solution.shortTitle}
                       </Link>
                     ))}
+                  </div>
+                )}
+                {item.href === "/products/" && (
+                  <div className="mobile-solutions mobile-product-categories">
+                    {productCategories.map((category) => <Link href={`/products/category/${category.id}/`} key={category.id} aria-current={active(`/products/category/${category.id}/`) ? "page" : undefined} onClick={close}>{category.shortTitle}</Link>)}
                   </div>
                 )}
               </div>

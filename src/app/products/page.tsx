@@ -7,6 +7,7 @@ import { EquipmentIllustration } from "@/components/ui/equipment-illustration";
 import { PrimaryButton } from "@/components/ui/buttons";
 import { ContactCTA } from "@/components/ui/contact-cta";
 import { ProductCatalog } from "@/components/catalog/product-catalog";
+import { ProductCategoryDirectory } from "@/components/catalog/category-directory";
 export const metadata = pageMetadata("Products & Equipment", "Browse products and equipment categories found in the supplied Techno World International profile. Division ownership and current availability are labeled for each reference.", "/products/");
 export default function ProductsPage() {
   const hasProducts = publishedProducts.length > 0;
@@ -36,12 +37,14 @@ export default function ProductsPage() {
         }
       />
       <SectionWrapper id="equipment-catalog" className="section-white">
+        <div className="catalog-category-intro"><SectionHeading eyebrow="BROWSE BY CATEGORY" title="Start with the equipment area." description="Every category opens a dedicated view of all catalog references assigned to it. No category is limited to featured items." /></div>
+        <ProductCategoryDirectory />
         <div className="section-top">
           <SectionHeading
-            eyebrow={hasProducts ? "PRODUCT CATALOG" : "EQUIPMENT EXPLORER"}
+            eyebrow={hasProducts ? "COMPLETE CATALOG" : "EQUIPMENT EXPLORER"}
             title={
               hasProducts
-                ? "Find equipment for your requirements."
+                ? "Search across every product reference."
                 : "Browse the profile product references."
             }
             description="Search across product names, models and keywords, or filter the profile references by category."
