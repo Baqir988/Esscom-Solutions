@@ -1,6 +1,6 @@
 # ESSCOM website
 
-A corporate technology website built through Phases 1-5, with Phase 6 media preparation, using Next.js App Router, React, strict TypeScript, Tailwind CSS, Lucide icons, and locally bundled Inter. The application is frontend-only and exports static files. No database, authentication, API backend, analytics, or non-operational contact form is included.
+A corporate technology website built through Phases 1-5, with Phase 6 media preparation, using Next.js App Router, React, strict TypeScript, Tailwind CSS, Lucide icons, and locally bundled Inter. The application is frontend-only and uses Next.js standard production output for Vercel; eligible routes are prerendered during the build. No database, authentication, API backend, analytics, or non-operational contact form is included.
 
 The current release is a **staging/review website**. Contact infrastructure is implemented, but approved ESSCOM contact channels are still missing. Product models, installations, client/partner relationships, and legal copy remain approval-dependent. Phase 6 extracted every embedded profile image and prepared private WebP derivatives. No profile-derived image is public because reproduction rights and division attribution remain unconfirmed. Only queue management is currently published as a solution category based on ESSCOM-specific references; other catalog categories await confirmation.
 
@@ -17,10 +17,10 @@ Open http://localhost:3000. Production preview:
 
 ```sh
 npm run build
-npm run preview
+npm run start
 ```
 
-Preview serves out/ on loopback port 3000. Stop the dev server first, or set PORT to another port (PowerShell: `$env:PORT='3001'`). The preview utility is for local QA, not an application backend. It uses gzip and immutable caching for hashed assets to approximate CDN transfer behavior.
+The production server uses Next.js next start and serves the .next build. Stop the dev server first, or choose a different port (PowerShell: $env:PORT=3001).
 
 ## Checks
 
@@ -29,15 +29,13 @@ npm run typecheck
 npm run lint
 npm test
 npm run build
-npm run check:export
-npm run check:assets
 npm run test:browser:install
 npm run test:e2e
 ```
 
-For a build-level indexing check, run `npm run check:indexing` with no preview/browser test running. It builds production and preview fixtures with reserved test origins, verifies canonicals/sitemaps/robots, and always rebuilds the actual environment afterward. Do not deploy the intermediate fixture output.
+Deployment indexing behavior is covered by unit tests; use the configured Vercel Preview environment to verify real deployment metadata and routes.
 
-Browser tests require installed Google Chrome and Playwright WebKit. They start and stop their own static server on port 3100. The suite covers 13 public routes at 320, 360, 390, 430, 768, 1024, 1280, 1440, and 1920 pixels; navigation, focus, search/filter/sort/reset, FAQs, 404s, and axe WCAG A/AA checks. These are desktop browser engines, not physical Android/iPhone tests. WebKit link keyboard activation is tested with explicit focus because its platform default can skip links on Tab. Unit tests cover publication gates and unexposed product/project templates using synthetic fixtures confined to tests/.
+Browser tests require installed Google Chrome and Playwright WebKit. They start and stop a Next.js production server on an isolated port. The suite covers 13 public routes at 320, 360, 390, 430, 768, 1024, 1280, 1440, and 1920 pixels; navigation, focus, search/filter/sort/reset, FAQs, 404s, and axe WCAG A/AA checks. These are desktop browser engines, not physical Android/iPhone tests. WebKit link keyboard activation is tested with explicit focus because its platform default can skip links on Tab. Unit tests cover publication gates and unexposed product/project templates using synthetic fixtures confined to tests/.
 
 With a separate preview running:
 
@@ -57,7 +55,7 @@ Lighthouse uses one cold navigation per representative route, default simulated 
 - src/lib/: search/filter logic, contact URLs, publication selectors, deployment policy, metadata, route inventory.
 - src/hooks/: hydration readiness and mobile dialog behavior.
 - public/images/, public/logos/, public/icons/: approved local assets only; source-profile images and logos remain private.
-- scripts/: static compatibility, export/link checks, local server, performance measurement.
+- scripts/: route/link checks, performance measurement, and private media workflows.
 - tests/: unit/rendering tests plus tests/e2e/ browser coverage.
 
 The internal CONTENT_VERIFICATION.md is maintained locally and excluded from GitHub by .gitignore. Share it only through an approved internal channel. Do not commit source profiles, private records, credentials, .env.local, build outputs, or QA artifacts.
@@ -72,7 +70,7 @@ Edit src/data/solutions.ts. The same records power navigation, directory cards, 
 
 Add typed Product records to src/data/products.ts. Every model needs a unique id/slug, a published solution categoryId, description/overview, keywords, approved images, applications, and valid relatedProductIds. Publish only with verificationStatus: "approved" and published: true. Features/specifications have separate verified flags. Never infer availability, pricing, stock, warranties, or manufacturer relationships.
 
-With no approved product models, the catalog shows three queue-system equipment categories and links to the queue solution. Product detail templates exist, but no fictional detail routes are generated. next.config.ts enables the page.product.tsx extension only when published records exist; keep this convention because Next static export rejects discovered dynamic routes with no generated parameters.
+With no approved product models, the catalog shows three queue-system equipment categories and links to the queue solution. Product detail templates exist, but no fictional detail routes are generated. next.config.ts enables the page.product.tsx extension only when published records exist; keep this convention so unpublished templates never become public routes.
 
 ### Projects
 
@@ -92,7 +90,7 @@ src/lib/contact.ts normalizes telephone/WhatsApp numbers without guessing a coun
 
 Public visuals currently use code-drawn conceptual illustrations and a generic queue glyph favicon (not an ESSCOM logo). No DOCX image or logo is public. Private media contains 616 unique extracted images and 502 WebP derivatives across responsive sizes. Inter is one local variable WOFF2 (48,256 bytes) with swap display. Avoid adding remote font requests.
 
-Future approved assets should be resized and compressed to appropriate WebP/AVIF dimensions before entering public/. Store src, alt, width, height, approved, and kind in MediaAsset. Keep aspect ratios reserved. ApprovedImage provides lazy loading and error fallback; MediaGallery supports approved thumbnails. The static export does not use a Next image optimization server. Raw source images remain outside public/. Do not publish a profile image without documented media rights and division attribution.
+Future approved assets should be resized and compressed to appropriate WebP/AVIF dimensions before entering public/. Store src, alt, width, height, approved, and kind in MediaAsset. Keep aspect ratios reserved. ApprovedImage provides lazy loading and error fallback; MediaGallery supports approved thumbnails. Website images currently use approved local source variants and do not depend on a remote image service. Raw source images remain outside public/. Do not publish a profile image without documented media rights and division attribution.
 
 ## SEO and indexing
 
@@ -109,11 +107,11 @@ Local builds without a URL omit canonicals and structured data. Preview builds e
 
 Production indexing requires both SITE_INDEXING=production and an explicit valid NEXT_PUBLIC_SITE_URL outside a Vercel preview environment. Only published content routes enter the sitemap. Privacy stays noindex and excluded until legal wording is approved; the custom 404 remains noindex. Each page has unique title/description and Open Graph/Twitter metadata. WebSite JSON-LD includes only the brand name and real configured URL; no unsupported company claims, ratings, addresses, or awards are added.
 
-## Static build and compatibility
+## Production build and Vercel output
 
-next.config.ts retains output: "export", trailingSlash: true, and images.unoptimized: true. Build with npm run build, not next export or next start. Metadata route handlers are force-static; there are no request-time APIs or server actions.
+next.config.ts uses Next.js default production output (no output: export) with trailingSlash enabled and images.unoptimized enabled. Run npm run build to create .next/, then npm run start to serve the production build locally. Routes that can be prerendered are still generated as static HTML by Next; the project no longer requires an out/ directory. Metadata routes remain build-time generated; there are no API routes or server actions.
 
-The build runs scripts/fix-static-segments.mjs after Next. It adds missing flat-name aliases for nested RSC segment files produced on Windows. It preserves originals, checks collisions, and is a no-op for correctly named files. This fixes observed navigation/prefetch 404s without disabling routing. [Upstream Next issue](https://github.com/vercel/next.js/issues/85374).
+Vercel should use the Next.js framework preset and its default output handling. Do not set an Output Directory override such as out; if one was previously entered in Vercel Project Settings, clear it and redeploy. vercel.json keeps the build/install commands and response security headers, while leaving output artifact selection to Vercel.
 
 ## GitHub preparation
 
@@ -123,7 +121,7 @@ Add the exact authorized remote with git remote add origin YOUR_REPOSITORY_URL, 
 
 ## Vercel staging deployment
 
-The repository includes vercel.json: Next.js framework, npm ci, npm run build, output out/, trailing slashes, and basic response headers. Select Node.js 24.x and root directory esscom-website if importing the parent folder, or repository root if this folder is the Git root. Vercel handles asset compression; confirm deployed response headers during post-deployment QA.
+The repository includes vercel.json with the Next.js framework preset, npm ci, npm run build, and basic response security headers. It intentionally does not specify outputDirectory; Vercel detects Next.js runtime output. Select Node.js 24.x and set the project root to the directory containing package.json. Vercel handles asset compression; confirm deployed response headers during post-deployment QA.
 
 ESSCOM is commercial. [Vercel requires Pro or Enterprise for commercial usage](https://vercel.com/docs/limits/fair-use-guidelines). An authorized owner must verify the existing team plan; do not use Hobby, purchase a plan automatically, or change billing.
 

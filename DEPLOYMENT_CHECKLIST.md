@@ -1,16 +1,16 @@
 # ESSCOM deployment checklist
 
-Last reviewed: 29 October 2026 (Asia/Karachi).
+Last reviewed: 11 November 2026 (Asia/Karachi).
 
-**Status: staging build prepared locally; not deployed to Vercel.**
+**Status: Next.js runtime build prepared locally; not deployed to Vercel.**
 
-Actual deployment URL: **none**. No Vercel authentication, linked project, token, or authorized commercial team was available. No Git remote was configured or pushed. Do not interpret the local preview address as a hosted release.
+Actual deployment URL: **none**. No Vercel authentication, linked project, token, or authorized commercial team was available. The origin remote points to the ESSCOM GitHub repository; this configuration change has not yet been pushed. Do not interpret the local preview address as a hosted release.
 
 ## Completed preparation
 
 - [x] Existing architecture, routes, dependencies, assets, and content gates reviewed.
-- [x] Static export retained: `output: "export"`, unoptimized static images, trailing slashes.
-- [x] Build succeeds; Windows RSC filename compatibility aliases added and checked.
+- [x] Next.js standard production output enabled; generated routes prerender at build with runtime 404 handling.
+- [x] Production Next.js build succeeds with default output.
 - [x] Production/preview indexing builds tested; actual staging output restored.
 - [x] Explicit `NEXT_PUBLIC_SITE_URL` and `SITE_INDEXING` policy implemented.
 - [x] Sitemap includes only published routes when production indexing is enabled.
@@ -21,18 +21,23 @@ Actual deployment URL: **none**. No Vercel authentication, linked project, token
 - [x] Development-only Playwright, axe, Lighthouse, route and asset checks available.
 - [x] Final 25 unit/rendering tests and 32 Chrome/WebKit browser tests passed, including 234 route/viewport observations and 52 automated accessibility scans.
 - [x] Current source assets remain lightweight; no Phase 6 media extraction performed.
-- [x] `vercel.json`, Node 24.x requirement, lockfile, and `.env.example` prepared.
+- [x] Vercel config uses Next.js framework/build settings and headers; it does not pin an output directory. Node 24.x and lockfile are configured.
+- [x] Local next start smoke check returns 200 for representative routes and 404 for unknown/unpublished routes.
 - [x] Local Git repository initialized; ignored files checked for build outputs, secrets, private documents, and internal attribution notes.
 - [x] README documents content updates, local QA, GitHub setup, and Vercel preview instructions.
 
 Final browser-suite outcome is recorded in VALIDATION.md; this checklist does not replace that evidence.
+
+## Vercel output-mode correction (11 November 2026)
+
+The project now uses Next.js default production output instead of export mode. The out/ output-directory override and duplicate trailing-slash setting were removed from vercel.json; Vercel handles the detected Next.js output. npm run build and a local next start route smoke test passed. This changes repository configuration only; no Vercel account was available for a hosted deployment. If the Vercel dashboard has an Output Directory override saved in Project Settings, clear it before redeploying.
 
 ## Required before a Vercel preview
 
 - [ ] Owner identifies the authorized Vercel team/project and authenticates locally.
 - [ ] Verify the existing team is Pro or Enterprise. Hobby is restricted to non-commercial use under [Vercel's policy](https://vercel.com/docs/limits/fair-use-guidelines).
 - [ ] Verify the GitHub remote before any push; use an authorized repository.
-- [ ] Confirm root directory, Node 24.x, `npm ci`, `npm run build`, and `out/` output.
+- [ ] Confirm project root contains package.json, Node 24.x, npm ci, and npm run build. Ensure Vercel Project Settings has no Output Directory override such as out; Vercel should use its Next.js preset defaults.
 - [ ] Keep `SITE_INDEXING=staging` in Preview and initially in Production.
 - [ ] Keep deployment protection enabled; confirm authorized reviewers can access it.
 - [ ] Deploy a preview without `--prod`, record its actual `.vercel.app` URL.
@@ -77,7 +82,7 @@ Phase 6 extraction and private preparation are implemented: 906 embedded candida
 - [x] Every original preserved privately and hash-verified; exact duplicates identified.
 - [x] Full inventory, machine-readable manifest and private review gallery created.
 - [x] Responsive derivatives checked for decoding, dimensions, transparency and metadata.
-- [x] TypeScript, lint, 29 unit/rendering tests, production static export, media provenance/image output checks passed.
+- [x] TypeScript, lint, 29 unit/rendering tests, Next.js production build, media provenance/image output checks passed.
 - [x] Static Chrome smoke check: 28 page/viewport combinations across 320, 390, 768 and 1440px; 244 image instances loaded with no horizontal overflow or console errors.
 - [ ] Full Playwright suite after image integration timed out; rerun in an environment with a working local browser harness.
 - [x] Static HTTP route/404 results recorded.
@@ -85,6 +90,6 @@ Phase 6 extraction and private preparation are implemented: 906 embedded candida
 - [x] Private archive, human annotations, manifest and inventory excluded from public Git/static output.
 - [ ] ESSCOM confirms public usage rights/current attribution for the 16 historical category references; captions avoid product-stock or installation claims.
 - [ ] ESSCOM provides higher-resolution replacements for small/soft POS, queue, biometric and signage photos where needed.
-- [x] Sixteen category references integrated into public registry/pages; TypeScript, asset, browser smoke and static export revalidated.
+- [x] Sixteen category references integrated into public registry/pages; TypeScript, asset, browser smoke and Next.js production build revalidated.
 - [ ] Project/installation, client, partner, official-logo and other-division assets approved separately before publication.
 - [ ] Authorized Vercel commercial account/project access supplied; preview deployed and verified.

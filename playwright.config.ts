@@ -12,5 +12,5 @@ export default defineConfig({
     { name: "chrome", use: { browserName: "chromium", channel: "chrome" } },
     { name: "webkit", use: { browserName: "webkit" } },
   ],
-  webServer: { command: "node scripts/serve-static.mjs", env: { PORT: port }, url: `http://127.0.0.1:${port}`, reuseExistingServer: false },
+  webServer: { command: "node node_modules/next/dist/bin/next start --hostname 127.0.0.1 --port " + port, env: { PORT: port }, url: `http://127.0.0.1:${port}`, reuseExistingServer: false },
 });
