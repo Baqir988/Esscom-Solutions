@@ -4,7 +4,7 @@ Last reviewed: 11 November 2026 (Asia/Karachi).
 
 **Status: Next.js runtime build prepared locally; not deployed to Vercel.**
 
-Actual deployment URL: **none**. No Vercel authentication, linked project, token, or authorized commercial team was available. The origin remote points to the ESSCOM GitHub repository; this configuration change has not yet been pushed. Do not interpret the local preview address as a hosted release.
+Actual deployment URL: **none**. No Vercel authentication, linked project, token, or authorized commercial team was available. The origin remote points to the ESSCOM GitHub repository; commit 08bfff6 has been pushed to main. Do not interpret the local preview address as a hosted release.
 
 ## Completed preparation
 
@@ -30,13 +30,13 @@ Final browser-suite outcome is recorded in VALIDATION.md; this checklist does no
 
 ## Vercel output-mode correction (11 November 2026)
 
-The project now uses Next.js default production output instead of export mode. The out/ output-directory override and duplicate trailing-slash setting were removed from vercel.json; Vercel handles the detected Next.js output. npm run build and a local next start route smoke test passed. This changes repository configuration only; no Vercel account was available for a hosted deployment. If the Vercel dashboard has an Output Directory override saved in Project Settings, clear it before redeploying.
+The project now uses Next.js default production output instead of export mode. The out/ output-directory override and duplicate trailing-slash setting were removed from vercel.json; Vercel handles the detected Next.js output. npm run build and a local next start route smoke test passed. The configuration change was pushed to main in commit 08bfff6; no Vercel account was available for a hosted deployment. If the Vercel dashboard has an Output Directory override saved in Project Settings, clear it before redeploying.
 
 ## Required before a Vercel preview
 
 - [ ] Owner identifies the authorized Vercel team/project and authenticates locally.
 - [ ] Verify the existing team is Pro or Enterprise. Hobby is restricted to non-commercial use under [Vercel's policy](https://vercel.com/docs/limits/fair-use-guidelines).
-- [ ] Verify the GitHub remote before any push; use an authorized repository.
+- [x] Verified the GitHub origin URL and pushed the configuration change to the intended main branch.
 - [ ] Confirm project root contains package.json, Node 24.x, npm ci, and npm run build. Ensure Vercel Project Settings has no Output Directory override such as out; Vercel should use its Next.js preset defaults.
 - [ ] Keep `SITE_INDEXING=staging` in Preview and initially in Production.
 - [ ] Keep deployment protection enabled; confirm authorized reviewers can access it.
